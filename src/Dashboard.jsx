@@ -9,7 +9,7 @@ function Dashboard(){
 
     const fetchUsers =async ()=>{
         try{
-            const response = await api.get('/users');
+            const response = await api.get('/allngos');
             setUsers(response.data);
             setError('');
         }
