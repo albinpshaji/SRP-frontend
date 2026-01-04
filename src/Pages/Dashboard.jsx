@@ -17,7 +17,7 @@ function Dashboard(){
             setError("access denied , jwt verification failed");
             if(err.reposnse?.status == 403){
                 console.log("403 error");
-                navigate('/login');
+                navigate('/');
             }
         }
     }
