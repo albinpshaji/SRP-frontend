@@ -1,5 +1,5 @@
 import { useState } from "react";
-import api from "./api";
+import api from "../api";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
@@ -13,7 +13,7 @@ function Login() {
             const response = await api.post('/login', { username, password });
             localStorage.setItem('jwt_token', response.data.token);
             alert("login succesfull, jwt saved");
-            navigate('/dashboard');
+            navigate('/mydonations');
         }
         catch (error) {
             console.log("login failed!!", error);

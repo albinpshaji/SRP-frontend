@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import api from "./api";
+import api from "../api";
 import { useNavigate } from "react-router-dom";
 
 function Dashboard(){
@@ -17,7 +17,7 @@ function Dashboard(){
             setError("access denied , jwt verification failed");
             if(err.reposnse?.status == 403){
                 console.log("403 error");
-                navigate('/login');
+                navigate('/');
             }
         }
     }
@@ -44,7 +44,7 @@ function Dashboard(){
                 <ul>
                     {users.map(u=>(
                         <li key={u.userid}>
-                            <b>ID:</b>{u.userid} | <b>Users:</b>{u.username}
+                            <b>ID:</b>{u.userid} | <b>Users:</b>{u.username} | <b>location:</b>{u.location}
                         </li>
                     ))}
                 </ul>
