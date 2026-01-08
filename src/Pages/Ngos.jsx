@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 function Ngos(){
     const[ngos,setngos] =useState([]);
     const navigate = useNavigate();
+
     const showngos =async ()=>{
         try{
             const response = await api.get('/ngos');
@@ -17,6 +18,7 @@ function Ngos(){
     const handledonate = (id) =>{
         navigate(`/donate/${id}`);
     }
+
     useEffect(()=>{showngos();}
     ,[]);
 
