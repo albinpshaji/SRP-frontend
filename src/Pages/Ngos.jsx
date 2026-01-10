@@ -1,6 +1,7 @@
 import { useState,useEffect} from "react";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../Navbar";
 function Ngos(){
     const[ngos,setngos] =useState([]);
     const navigate = useNavigate();
@@ -23,9 +24,11 @@ function Ngos(){
     ,[]);
 
     return(<div><center>
+            <Navbar role ="DONOR"/>
             <h1>Ngos</h1>
             <ul>
-                {ngos.map(u=>(<li>{u.username}  |  {u.userid} <button onClick={()=> handledonate(u.userid)}>donate</button></li>))}
+                {ngos.map(u=>(<li>{u.username}  |  {u.userid} 
+                    <button onClick={()=> handledonate(u.userid)}>donate</button></li>))}
             </ul>
         </center></div>);
 }

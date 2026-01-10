@@ -2,6 +2,7 @@
 import { useParams } from "react-router-dom";
 import api from "../api";
 import { useEffect,useState} from "react";
+import Navbar from "../Navbar";
 
 function Acceptngos(){
     const[ngos,setngos]= useState([]);
@@ -44,11 +45,14 @@ function Acceptngos(){
     [refresh]);
 
     return(<div><center>
+            <Navbar role ="ADMIN"/>
             <h1>verify ngos</h1>
             <br/>
             <ul>
                 {ngos.map(u=>(
-                    <li key={u.userid}>{u.username}   |  {u.userid}  | {u.isverified?"verified" : "pending"}  <button onClick={()=>acceptngos(u.userid)}>accept</button>   <button onClick={()=>rejectngos(u.userid)}>reject</button></li>
+                    <li key={u.userid}>{u.username}   |  {u.userid}  | {u.isverified?"verified" : "pending"}  
+                    <button onClick={()=>acceptngos(u.userid)}>accept</button>   
+                    <button onClick={()=>rejectngos(u.userid)}>reject</button></li>
                 ))}
             </ul>
         </center></div>);

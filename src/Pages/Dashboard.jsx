@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../Navbar";
 
 function Dashboard(){
     const[users,setUsers]=useState([]);
@@ -32,6 +33,7 @@ function Dashboard(){
     }
 
     return(<div style={{padding:'2rem'}}>
+                <Navbar role ="ADMIN"/>
                 <h2>DashBoard</h2>
                 <p>jwt was succesfull</p>
                 <button onClick={fetchUsers}>Refresh List</button>

@@ -11,7 +11,7 @@ import Incomingdonations from './Pages/Incomingdonations';
 const router = createBrowserRouter([
     {path:"/",element:<Login/>},
     {path:"/register",element:<Register/>},
-    {path:"/dashboard",element:(<Protectedroute>  <Dashboard/>  </Protectedroute>)},
+    {path:"/allngos",element:(<Protectedroute>  <Dashboard/>  </Protectedroute>)},
     {path:"/mydonations",element:(<Protectedroute> <Mydonations/> </Protectedroute>)},
     {path:"/ngos",element:(<Protectedroute> <Ngos/> </Protectedroute>)},
     {path:"/donate/:id",element:(<Protectedroute> <Donateitems/> </Protectedroute>)},
