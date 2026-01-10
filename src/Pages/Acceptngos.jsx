@@ -5,6 +5,7 @@ import { useEffect,useState} from "react";
 
 function Acceptngos(){
     const[ngos,setngos]= useState([]);
+    const[refresh,setrefresh] = useState(false);
     const params = useParams();
 
     const showallngos = async ()=>{
@@ -20,6 +21,7 @@ function Acceptngos(){
     const acceptngos = async (id)=>{
         try{
             await api.post(`/verify/${id}`,{isverified:true});
+            setrefresh(prev=>!prev);
             alert("accepted");
         }
         catch(error){
@@ -30,6 +32,7 @@ function Acceptngos(){
     const rejectngos = async (id)=>{
         try{
             await api.post(`/verify/${id}`,{isverified:false});
+            setrefresh(prev=>!prev);
             alert("rejected");
         }
         catch(error){
@@ -38,18 +41,17 @@ function Acceptngos(){
     }
 
     useEffect(()=>{showallngos();},
-    []);
+    [refresh]);
 
     return(<div><center>
             <h1>verify ngos</h1>
             <br/>
             <ul>
                 {ngos.map(u=>(
-                    <li key={u.userid}>{u.username}   |  {u.userid}  | {u.isverified}  <button onClick={()=>acceptngos(u.userid)}>accept</button>   <button onClick={()=>rejectngos(u.userid)}>reject</button></li>
+                    <li key={u.userid}>{u.username}   |  {u.userid}  | {u.isverified?"verified" : "pending"}  <button onClick={()=>acceptngos(u.userid)}>accept</button>   <button onClick={()=>rejectngos(u.userid)}>reject</button></li>
                 ))}
             </ul>
         </center></div>);
 
 }
-
 export default Acceptngos;
