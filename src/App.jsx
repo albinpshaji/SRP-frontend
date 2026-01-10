@@ -1,13 +1,13 @@
 import {createBrowserRouter,RouterProvider} from 'react-router-dom';
-import Login from './Pages/Login';
-import Dashboard from './Pages/Dashboard';
-import Register from './Pages/Register';
-import Protectedroute from './Protectedroute';
-import Mydonations from './Pages/Mydonations';
-import Ngos from './Pages/Ngos';
-import Donateitems from './Pages/Donateitems';
-import Acceptngos from './Pages/Acceptngos';
-import Incomingdonations from './Pages/Incomingdonations';
+import Login from './pages/shared/Login';
+import Dashboard from './pages/admin/Dashboard';
+import Register from './pages/shared/Register';
+import Protectedroute from './components/common/Protectedroute';
+import Mydonations from './pages/donor/Mydonations';
+import Ngos from './pages/donor/Ngos';
+import Donateitems from './pages/donor/Donateitems';
+import Acceptngos from './pages/admin/Acceptngos';
+import Incomingdonations from './pages/distributor/Incomingdonations';
 const router = createBrowserRouter([
     {path:"/",element:<Login/>},
     {path:"/register",element:<Register/>},

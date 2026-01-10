@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import api from "../api";
-import Navbar from "../Navbar";
+import api from "../../services/api";
+import Navbar from "../../components/layout/Navbar";
 function Mydonations(){
     const[donations,setdonations] = useState([]);
 
