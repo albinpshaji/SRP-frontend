@@ -1,7 +1,7 @@
 import { useState } from "react";
-import api from "../api";
+import api from "../../services/api";
 import { useParams,useNavigate} from "react-router-dom";
-
+import Navbar from "../../components/layout/Navbar";
 
 function Donateitems(){
     const[title,settitle] = useState('');

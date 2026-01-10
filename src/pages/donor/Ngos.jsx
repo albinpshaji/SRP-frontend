@@ -1,7 +1,7 @@
 import { useState,useEffect} from "react";
-import api from "../api";
+import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../Navbar";
+import Navbar from "../../components/layout/Navbar";
 function Ngos(){
     const[ngos,setngos] =useState([]);
     const navigate = useNavigate();
