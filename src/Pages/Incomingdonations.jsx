@@ -1,5 +1,6 @@
 import api from "../api";
 import { useEffect, useState } from "react";
+import Navbar from "../Navbar";
 
 function Incomingdonations(){
     const[donations,setdonations] = useState([]);
@@ -41,9 +42,12 @@ function Incomingdonations(){
     useEffect(()=>{incomingdonations();},[refresh]);
 
     return(<div><center>
+            <Navbar role="NGO"/>
             <h1>Incoming donations</h1>
             <ul>
-                {donations.map(u=>(<li>{u.title}  |  {u.description}  | {u.status} | <button onClick={()=>accept(u.donationid)}>accept</button>  <button onClick={()=>reject(u.donationid)}>reject</button></li>))}
+                {donations.map(u=>(<li>{u.title}  |  {u.description}  | {u.status} | 
+                    <button onClick={()=>accept(u.donationid)}>accept</button>  
+                    <button onClick={()=>reject(u.donationid)}>reject</button></li>))}
             </ul>
         </center></div>);
 }

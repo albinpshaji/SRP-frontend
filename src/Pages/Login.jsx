@@ -12,8 +12,22 @@ function Login() {
         try {
             const response = await api.post('/login', { username, password });
             localStorage.setItem('jwt_token', response.data.token);
+            localStorage.setItem('role',response.data.role);
             alert("login succesfull, jwt saved");
-            navigate('/mydonations');
+            const role = response.data.role;
+            if(role=="DONOR"){
+                navigate('/mydonations');
+            }
+            else if(role=="NGO"){
+                navigate('/incomingdonations');
+            }
+            else if(role=="ADMIN"){
+                navigate('/allngos');
+            }
+            else{
+                navigate('/');
+            }
+            
         }
         catch (error) {
             console.log("login failed!!", error);

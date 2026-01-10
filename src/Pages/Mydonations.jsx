@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import api from "../api";
+import Navbar from "../Navbar";
 function Mydonations(){
     const[donations,setdonations] = useState([]);
 
@@ -18,6 +19,7 @@ function Mydonations(){
     },[])
 
     return(<div style={{padding:'2rem'}}><center>
+                <Navbar role="DONOR"/>
                 <h1>Mydonations</h1>
                 <ul>
                     {donations.map(u=>(<li>{u.category} | {u.title} | {u.description} {u.status}</li>))}
