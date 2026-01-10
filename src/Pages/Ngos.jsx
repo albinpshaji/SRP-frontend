@@ -1,7 +1,9 @@
 import { useState,useEffect} from "react";
 import api from "../api";
+import { useNavigate } from "react-router-dom";
 function Ngos(){
     const[ngos,setngos] =useState([]);
+    const navigate = useNavigate();
 
     const showngos =async ()=>{
         try{
@@ -13,13 +15,17 @@ function Ngos(){
         }
     }
 
+    const handledonate = (id) =>{
+        navigate(`/donate/${id}`);
+    }
+
     useEffect(()=>{showngos();}
     ,[]);
 
     return(<div><center>
             <h1>Ngos</h1>
             <ul>
-                {ngos.map(u=>(<li>{u.username}  |  {u.userid}</li>))}
+                {ngos.map(u=>(<li>{u.username}  |  {u.userid} <button onClick={()=> handledonate(u.userid)}>donate</button></li>))}
             </ul>
         </center></div>);
 }
