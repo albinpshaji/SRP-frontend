@@ -42,7 +42,6 @@ function Incomingdonations(){
     useEffect(()=>{incomingdonations();},[refresh]);
 
     return(<div><center>
-            <Navbar role="NGO"/>
             <h1>Incoming donations</h1>
             <ul>
                 {donations.map(u=>(<li>{u.title}  |  {u.description}  | {u.status} | 

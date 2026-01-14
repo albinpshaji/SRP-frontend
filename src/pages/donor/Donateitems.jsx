@@ -25,7 +25,6 @@ function Donateitems(){
     }
 
     return(<div><center>
-            <Navbar role ="DONOR"/>
             <h1>donate</h1>
             <form onSubmit={setdonations}>
                 <input placeholder="title"

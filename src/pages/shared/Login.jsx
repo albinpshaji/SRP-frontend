@@ -1,6 +1,7 @@
 import { useState } from "react";
 import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../../components/layout/Navbar";
 
 function Login() {
     const [username, setUsername] = useState('');
@@ -36,6 +37,7 @@ function Login() {
     };
 
     return (<div style={{ padding: '2rem' }}><center>
+
         <h2>Login</h2>
         <form onSubmit={handleLogin}>
             <input

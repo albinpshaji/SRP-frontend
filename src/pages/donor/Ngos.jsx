@@ -24,7 +24,6 @@ function Ngos(){
     ,[]);
 
     return(<div><center>
-            <Navbar role ="DONOR"/>
             <h1>Ngos</h1>
             <ul>
                 {ngos.map(u=>(<li>{u.username}  |  {u.userid} 

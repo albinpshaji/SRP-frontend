@@ -45,7 +45,6 @@ function Acceptngos(){
     [refresh]);
 
     return(<div><center>
-            <Navbar role ="ADMIN"/>
             <h1>verify ngos</h1>
             <br/>
             <ul>

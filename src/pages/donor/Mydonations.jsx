@@ -18,11 +18,12 @@ function Mydonations(){
         getmydonations();
     },[])
 
-    return(<div style={{padding:'2rem'}}><center>
-                <Navbar role="DONOR"/>
-                <h1>Mydonations</h1>
+    return(
+    <div style={{padding:'2rem'}}><center>
+                
+                <h1 className="text-green-500">Mydonations</h1>
                 <ul>
-                    {donations.map(u=>(<li>{u.category} | {u.title} | {u.description} {u.status}</li>))}
+                    {donations.map(u=>(<li>{u.category} | {u.title} | {u.description} {u.status}</li>))}//a callback fn inside
                 </ul>
         </center></div>);
 }

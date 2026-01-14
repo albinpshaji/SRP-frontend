@@ -1,23 +1,30 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate,useLocation} from 'react-router-dom';
 
-const Navbar = ({ role }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const[role,setrole] =useState(localStorage.getItem('role'));
 
   const handleLogout = () => {
     localStorage.removeItem('role'); 
     localStorage.removeItem('jwt_token'); 
     navigate('/');
-    window.location.reload(); 
   };
 
+  useEffect(()=>{
+      setrole(localStorage.getItem('role'));
+  },[location]);
+
+  const navlink ="hover:text-green-500 transition-colors duration-300 cursor-pointer";
+  const btnStyle="bg-gray-100 text-gray-700 px-4 py-1.5 rounded-full font-medium tracking-wide shadow-sm hover:bg-gray-200 hover:text-gray-900 active:scale-95 transition-all duration-200 border border-gray-200";
   const renderLinks = () => {
     if (!role) {
       return (
         <>
-          <Link to="/browse-ngos">Browse NGOs</Link>
-          <Link to="/" className="btn-nav">Login / Join</Link>
+          <Link to="/">login</Link>
+          <Link to="/register" className={navlink}>Sign-up</Link>
         </>
       );
     }
@@ -26,9 +33,9 @@ const Navbar = ({ role }) => {
       case 'DONOR':
         return (
           <>
-            <Link to="/ngos">Find NGOs</Link>
-            <Link to="/mydonations">My Donations</Link>
-            <button onClick={handleLogout} className="btn-nav secondary">Logout</button>
+            <Link to="/ngos" className={navlink}>Find NGOs</Link>
+            <Link to="/mydonations" className={navlink}>My Donations</Link>
+            <button onClick={handleLogout} className={btnStyle}>Logout</button>
           </>
         );
       
@@ -36,40 +43,33 @@ const Navbar = ({ role }) => {
       case 'WARD_MEMBER':
         return (
           <>
-            <Link to="/incomingdonations">Incomingdonations</Link>
-            <Link to="/logistics">Logistics</Link>
-            <button onClick={handleLogout} className="btn-nav secondary">Logout</button>
+            <Link to="/incomingdonations" className={navlink}>Incomingdonations</Link>
+            <Link to="/logistics" className={navlink}>Logistics</Link>
+            <button onClick={handleLogout} className={btnStyle}>Logout</button>
           </>
         );
       
       case 'ADMIN':
         return (
           <>
-            <Link to="/verifyngos">VerifyNgos</Link>
-            <Link to="/allngos">  Allngos</Link>
-            <Link to="/conflicts">Conflicts</Link>
-            <button onClick={handleLogout} className="btn-nav secondary">Logout</button>
+            <Link to="/verifyngos" className={navlink}>VerifyNgos</Link>
+            <Link to="/allngos" className={navlink}>  Allngos</Link>
+            <Link to="/conflicts" className={navlink}>Conflicts</Link>
+            <button onClick={handleLogout} className={btnStyle}>Logout</button>
           </>
         );
       
       default:
-        return <button onClick={handleLogout} className="btn-nav secondary">Logout</button>;
+        return <button onClick={handleLogout} className={btnStyle}>Logout</button>;
     }
   };
 
   return (
-    <nav className="navbar">
-      <div className="logo" onClick={() => navigate('/')}>
-        <i className="fa-solid fa-hands-holding-circle"></i> Sevana
-      </div>
-      
-      <div className="hamburger" onClick={() => setIsOpen(!isOpen)}>
-        <i className="fa-solid fa-bars"></i>
-      </div>
-
-      <div className={`nav-links ${isOpen ? 'active' : ''}`}>
-        {renderLinks()}
-      </div>
+    <nav className='bg-white flex justify-between items-center px-6 h-16'>
+      <div className='logo font-bold text-green-700 text-2xl'>Sevena</div>
+      <ul className='flex gap-4 items-center'>
+          {renderLinks()}
+      </ul>  
     </nav>
   );
 };
