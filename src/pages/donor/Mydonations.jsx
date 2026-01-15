@@ -23,7 +23,7 @@ function Mydonations(){
                 
                 <h1 className="text-green-500">Mydonations</h1>
                 <ul>
-                    {donations.map(u=>(<li>{u.category} | {u.title} | {u.description} {u.status}</li>))}//a callback fn inside
+                    {donations.map(u=>(<li>{u.category} | {u.title} | {u.description} {u.status}</li>))}{/*a callback fn inside */}
                 </ul>
         </center></div>);
 }

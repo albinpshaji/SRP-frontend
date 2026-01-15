@@ -23,7 +23,8 @@ const Navbar = () => {
     if (!role) {
       return (
         <>
-          <Link to="/">login</Link>
+          <Link to="/" className={navlink}>Home</Link>
+          <Link to="/login" className={navlink}>login</Link>
           <Link to="/register" className={navlink}>Sign-up</Link>
         </>
       );
@@ -66,7 +67,7 @@ const Navbar = () => {
 
   return (
     <nav className='bg-white flex justify-between items-center px-6 h-16'>
-      <div className='logo font-bold text-green-700 text-2xl'>Sevena</div>
+      <div className='logo font-bold text-green-700 text-2xl'>Sevana</div>
       <ul className='flex gap-4 items-center'>
           {renderLinks()}
       </ul>  
