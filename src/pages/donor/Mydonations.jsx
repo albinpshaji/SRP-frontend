@@ -28,27 +28,27 @@ function Mydonations(){
         switch (status.toUpperCase()) {
         case "PENDING":
             return {
-                border: "border-l-orange-500",
-                badge: "bg-orange-100 text-orange-700",
-                text: "text-orange-600",
+                border:"border-l-orange-500",
+                badge:"bg-orange-100 text-orange-700",
+                text:"text-orange-600",
             };
         case "ACCEPTED":
             return {
-                border: "border-l-green-600",
-                badge: "bg-green-100 text-green-700",
-                text: "text-green-600",
+                border:"border-l-green-600",
+                badge:"bg-green-100 text-green-700",
+                text:"text-green-600",
             };
         case "REJECTED": 
             return {
-                border: "border-l-red-500",
-                badge: "bg-red-100 text-red-700",
-                text: "text-red-600",
+                border:"border-l-red-500",
+                badge:"bg-red-100 text-red-700",
+                text:"text-red-600",
         };
         default:
             return {
-                border: "border-l-gray-400",
-                badge: "bg-gray-100 text-gray-700",
-                text: "text-gray-600",
+                border:"border-l-gray-400",
+                badge:"bg-gray-100 text-gray-700",
+                text:"text-gray-600",
         };
         }
     };
@@ -85,7 +85,7 @@ function Mydonations(){
 
               return (
                 <div
-                  key={donation.id || donation._id} 
+                  key={donation.doantionid} 
                   className={`bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden border-l-4 ${styles.border}`}
                 >
                   {/* Image Area */}
