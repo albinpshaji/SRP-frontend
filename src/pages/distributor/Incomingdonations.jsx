@@ -131,6 +131,9 @@ function Incomingdonations(){
                     <h3 className="text-xl font-bold text-gray-800 mb-2 line-clamp-1">
                       {u.title}
                     </h3>
+                    <h2 className="text-sm font-bold text-gray-800 mb-2 line-clamp-1">
+                      {u.logistics}
+                    </h2>
                     
                     <p className="text-gray-500 text-sm mb-6 line-clamp-3 flex-grow">
                       {u.description || "No description provided."}
