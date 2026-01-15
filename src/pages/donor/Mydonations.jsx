@@ -23,7 +23,7 @@ function Mydonations(){
             ? donations
             : donations.filter((d) => d.status?.toUpperCase() === activeTab.toUpperCase());
 
-    // Helper for Status Colors (Updated for Rejected)
+    //Helper for Status Colors
     const getStatusStyles = (status) => {
         switch (status.toUpperCase()) {
         case "PENDING":

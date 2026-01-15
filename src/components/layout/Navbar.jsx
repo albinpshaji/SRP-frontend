@@ -66,7 +66,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className='bg-white flex justify-between items-center px-6 h-16'>
+    <nav className='bg-white flex justify-between items-center px-6 h-16 sticky top-0 z-50 shadow-sm'>
       <div className='logo font-bold text-green-700 text-2xl'>Sevana</div>
       <ul className='flex gap-4 items-center'>
           {renderLinks()}
