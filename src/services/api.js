@@ -20,7 +20,8 @@ api.interceptors.response.use(
     res=>res,
     err=>{
         if(err.response?.status==401){
-            localStorage.removeItem("token");
+            localStorage.removeItem("jwt_token");
+            localStorage.removeItem("role");
             window.location.href = "/";
         }
         return Promise.reject(err);
