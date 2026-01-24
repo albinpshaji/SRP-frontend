@@ -15,8 +15,7 @@ const DonationImage = ({ donationId, title }) => {
 
         const fetchImage = async () => {
             try {
-                // Tries to fetch image from incoming donations endpoint
-                // Ensure your backend has: @GetMapping("/incomingdonations/{id}/image")
+                
                 const response = await api.get(`/mydonations/${donationId}`, {
                     responseType: 'blob' 
                 });
