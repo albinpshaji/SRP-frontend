@@ -12,6 +12,7 @@ import Incomingdonations from './pages/distributor/Incomingdonations';
 import Home from './pages/shared/Home';
 import DonationDetails from './pages/shared/DonationDetails';
 import IncomingDonationDetails from './pages/distributor/IncomingDonationDetails';
+import NgoDetails from './pages/admin/NgoDetails';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
       {path:"/ngos", element: (<Protectedroute> <Ngos/> </Protectedroute>) },
       {path:"/donate/:id", element: (<Protectedroute> <Donateitems/> </Protectedroute>) },
       {path:"/verifyngos", element: (<Protectedroute> <Acceptngos/> </Protectedroute>) },
+      {path:"/verifyngos/ngodetails/:id", element: (<Protectedroute> <NgoDetails/> </Protectedroute>) },
       {path:"/incomingdonations", element: (<Protectedroute><Incomingdonations/></Protectedroute>) },
       {path:"/incomingdonations/:id",element:(<Protectedroute><IncomingDonationDetails/></Protectedroute>)}
     ]
