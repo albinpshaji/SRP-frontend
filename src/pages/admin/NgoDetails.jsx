@@ -13,7 +13,6 @@ function NgoDetails() {
     const location = useLocation();
     const navigate = useNavigate();
     
-    // State Logic
     const [ngoData, setNgoData] = useState(location.state?.ngo || null);
     const [extraDetails, setExtraDetails] = useState(null);
     const [isLoading, setIsLoading] = useState(true);

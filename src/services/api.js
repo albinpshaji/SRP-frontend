@@ -1,5 +1,6 @@
 import axios from "axios";
 
+
 const api_url = 'http://localhost:8080';
 
 const api = axios.create({
@@ -17,13 +18,18 @@ api.interceptors.request.use((config)=>{
 );
 
 api.interceptors.response.use(
-    res=>res,
-    err=>{
-        if(err.response?.status==401){
-            localStorage.removeItem("jwt_token");
-            localStorage.removeItem("role");
+    res => res,
+    err => {
+        const status = err.response?.status;
+        if (status === 401) {
+            console.warn("Unauthorized! Clearing session...");
+            localStorage.clear(); 
             window.location.href = "/";
         }
+        if(status ===403){
+            window.location.href = "/";
+        }
+        
         return Promise.reject(err);
     }
 );
