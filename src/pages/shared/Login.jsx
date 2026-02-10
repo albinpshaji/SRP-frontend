@@ -25,6 +25,9 @@ function Login() {
             else if(role=="ADMIN"){
                 navigate('/allngos');
             }
+            else if(role=="NV_NGO"){
+                navigate('/verification-pending');
+            }
             else{
                 navigate('/');
             }
