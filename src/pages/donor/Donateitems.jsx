@@ -14,8 +14,6 @@ function Donateitems(){
     const navigate = useNavigate();
     const params = useParams();
 
-
-    //check extension and size
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {

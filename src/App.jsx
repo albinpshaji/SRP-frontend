@@ -13,6 +13,7 @@ import Home from './pages/shared/Home';
 import DonationDetails from './pages/shared/DonationDetails';
 import IncomingDonationDetails from './pages/distributor/IncomingDonationDetails';
 import NgoDetails from './pages/admin/NgoDetails';
+import VerificationPending from './pages/distributor/VerificationPending';
 
 const router = createBrowserRouter([
   {
@@ -30,7 +31,8 @@ const router = createBrowserRouter([
       {path:"/verifyngos", element: (<Protectedroute> <Acceptngos/> </Protectedroute>) },
       {path:"/verifyngos/ngodetails/:id", element: (<Protectedroute> <NgoDetails/> </Protectedroute>) },
       {path:"/incomingdonations", element: (<Protectedroute><Incomingdonations/></Protectedroute>) },
-      {path:"/incomingdonations/:id",element:(<Protectedroute><IncomingDonationDetails/></Protectedroute>)}
+      {path:"/incomingdonations/:id",element:(<Protectedroute><IncomingDonationDetails/></Protectedroute>)},
+      {path:"/verification-pending",element:(<Protectedroute><VerificationPending/></Protectedroute>)}
     ]
   }
 ]);
