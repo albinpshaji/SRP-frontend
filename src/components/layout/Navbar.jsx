@@ -48,6 +48,7 @@ const Navbar = () => {
         return (
           <>
             <Link to="/incomingdonations" className={navlink}>Incoming Donations</Link>
+            <Link to="/marketplace" className={navlink}>MarketPlace</Link>
             <Link to="/logistics" className={navlink}>Logistics</Link>
             <button onClick={handleLogout} className={btnStyle}>Logout</button>
           </>

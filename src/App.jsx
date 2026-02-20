@@ -14,6 +14,8 @@ import DonationDetails from './pages/shared/DonationDetails';
 import IncomingDonationDetails from './pages/distributor/IncomingDonationDetails';
 import NgoDetails from './pages/admin/NgoDetails';
 import VerificationPending from './pages/distributor/VerificationPending';
+import Marketplace from './pages/distributor/Marketplace';
+import MarketplaceDetails from './pages/distributor/MarketplaceDetails';
 
 const router = createBrowserRouter([
   {
@@ -28,11 +30,14 @@ const router = createBrowserRouter([
       {path:"/mydonations",element: (<Protectedroute><Mydonations/></Protectedroute>) },
       {path:"/ngos", element: (<Protectedroute> <Ngos/> </Protectedroute>) },
       {path:"/donate/:id", element: (<Protectedroute> <Donateitems/> </Protectedroute>) },
+      {path: "/marketplace/list", element: (<Protectedroute> <Donateitems/> </Protectedroute>)},
       {path:"/verifyngos", element: (<Protectedroute> <Acceptngos/> </Protectedroute>) },
       {path:"/verifyngos/ngodetails/:id", element: (<Protectedroute> <NgoDetails/> </Protectedroute>) },
       {path:"/incomingdonations", element: (<Protectedroute><Incomingdonations/></Protectedroute>) },
       {path:"/incomingdonations/:id",element:(<Protectedroute><IncomingDonationDetails/></Protectedroute>)},
-      {path:"/verification-pending",element:(<Protectedroute><VerificationPending/></Protectedroute>)}
+      {path:"/verification-pending",element:(<Protectedroute><VerificationPending/></Protectedroute>)},
+      {path:"/marketplace",element:(<Protectedroute><Marketplace/></Protectedroute>)},
+      {path:"/marketplace/:id",element:(<Protectedroute><MarketplaceDetails/></Protectedroute>)}
     ]
   }
 ]);
