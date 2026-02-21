@@ -1,7 +1,7 @@
 import { useState } from "react";
 import api from "../../services/api";
 import { Link, useNavigate } from "react-router-dom";
-import { Heart, Camera, Upload } from "lucide-react"; 
+import { Heart, Camera, Upload } from "lucide-react";
 
 function Register() {
     const [username, setUsername] = useState('');
@@ -9,20 +9,20 @@ function Register() {
     const [role, setRole] = useState('DONOR');
     const [phone, setPhone] = useState('');
     const [location, setLocation] = useState('');
-    
-    
+
+
     const [licenceno, setLicenceno] = useState('');
     const [website, setWebsite] = useState('');
-    const [imagefile, setImagefile] = useState(null); 
+    const [imagefile, setImagefile] = useState(null);
 
-    
+
     const [profilePic, setProfilePic] = useState(null);
 
     const navigate = useNavigate();
 
     const handleregister = async (e) => {
         e.preventDefault();
-        
+
         const formData = new FormData();
         const userDto = {
             username,
@@ -34,17 +34,17 @@ function Register() {
             website: role === 'NGO' ? website : null
         };
 
-        
+
         formData.append('user', new Blob([JSON.stringify(userDto)], {
             type: 'application/json'
         }));
 
-        
+
         if (role === 'NGO' && imagefile) {
-            formData.append('proof', imagefile); 
+            formData.append('proof', imagefile);
         }
 
-        
+
         if (profilePic) {
             formData.append('profilepic', profilePic);
         }
@@ -64,12 +64,12 @@ function Register() {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-[#FFF8F0] p-4">
-            
+
             <div className="flex flex-col md:flex-row w-full max-w-5xl bg-white rounded-[2rem] shadow-xl overflow-hidden min-h-[600px]">
-                
+
                 {/* LEFT SIDE: FORM */}
-                <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
-                    
+                <div className="w-full md:w-1/2 p-6 md:p-12 flex flex-col justify-center">
+
                     <h2 className="text-3xl font-bold text-gray-800 mb-2">Create Account</h2>
                     <p className="text-gray-500 mb-6">Join us in making a difference.</p>
 
@@ -78,43 +78,41 @@ function Register() {
                         <button
                             type="button"
                             onClick={() => setRole('DONOR')}
-                            className={`flex-1 py-3 rounded-full text-sm font-bold transition-all duration-300 ${
-                                role === 'DONOR' ? 'bg-white text-gray-800 shadow-md' : 'text-gray-500 hover:text-gray-700'
-                            }`}
+                            className={`flex-1 py-3 rounded-full text-sm font-bold transition-all duration-300 ${role === 'DONOR' ? 'bg-white text-gray-800 shadow-md' : 'text-gray-500 hover:text-gray-700'
+                                }`}
                         >
                             I am a Donor
                         </button>
                         <button
                             type="button"
                             onClick={() => setRole('NGO')}
-                            className={`flex-1 py-3 rounded-full text-sm font-bold transition-all duration-300 ${
-                                role === 'NGO' ? 'bg-[#2E7D32] text-white shadow-md' : 'text-gray-500 hover:text-gray-700'
-                            }`}
+                            className={`flex-1 py-3 rounded-full text-sm font-bold transition-all duration-300 ${role === 'NGO' ? 'bg-[#2E7D32] text-white shadow-md' : 'text-gray-500 hover:text-gray-700'
+                                }`}
                         >
                             I am an NGO
                         </button>
                     </div>
 
                     <form onSubmit={handleregister} className="space-y-4">
-                        
+
                         {/* --- NEW: PROFILE PICTURE UPLOAD --- */}
                         <div className="flex items-center space-x-4 mb-2">
                             <div className="relative group">
                                 <label className="cursor-pointer">
                                     <div className="w-16 h-16 rounded-full bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center hover:border-[#2E7D32] hover:bg-green-50 transition-all overflow-hidden">
                                         {profilePic ? (
-                                            <img 
-                                                src={URL.createObjectURL(profilePic)} 
-                                                alt="Preview" 
+                                            <img
+                                                src={URL.createObjectURL(profilePic)}
+                                                alt="Preview"
                                                 className="w-full h-full object-cover"
                                             />
                                         ) : (
                                             <Camera className="text-gray-400 group-hover:text-[#2E7D32]" size={24} />
                                         )}
                                     </div>
-                                    <input 
-                                        type="file" 
-                                        className="hidden" 
+                                    <input
+                                        type="file"
+                                        className="hidden"
                                         onChange={(e) => setProfilePic(e.target.files[0])}
                                     />
                                 </label>
@@ -150,7 +148,7 @@ function Register() {
                             />
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-semibold text-gray-600 mb-1">Phone</label>
                                 <input
@@ -179,7 +177,7 @@ function Register() {
                         <div className={`transition-all duration-500 overflow-hidden ${role === 'NGO' ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}>
                             <div className="space-y-4 pt-2 border-t border-dashed border-gray-300 mt-2">
                                 <p className="text-xs font-bold text-[#2E7D32] uppercase tracking-wider">NGO Verification Details</p>
-                                
+
                                 <input
                                     type="text"
                                     className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-600 outline-none bg-gray-50 focus:bg-white"
@@ -188,7 +186,7 @@ function Register() {
                                     onChange={(e) => setLicenceno(e.target.value)}
                                     required={role === 'NGO'}
                                 />
-                                
+
                                 <input
                                     type="text"
                                     className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-600 outline-none bg-gray-50 focus:bg-white"
@@ -205,9 +203,9 @@ function Register() {
                                                 {imagefile ? imagefile.name : "Upload NGO Proof Document"}
                                             </span>
                                         </div>
-                                        <input 
-                                            type="file" 
-                                            className="hidden" 
+                                        <input
+                                            type="file"
+                                            className="hidden"
                                             onChange={(e) => setImagefile(e.target.files[0])}
                                             required={role === 'NGO'}
                                         />
@@ -222,9 +220,9 @@ function Register() {
                         >
                             {role === 'NGO' ? 'Register as NGO' : 'Register as Donor'}
                         </button>
-                        
+
                         <p className="text-center text-gray-500 text-sm mt-4">
-                           Already have an account? <Link to="/login" className="text-[#2E7D32] font-bold hover:underline">Login</Link>
+                            Already have an account? <Link to="/login" className="text-[#2E7D32] font-bold hover:underline">Login</Link>
                         </p>
 
                     </form>
@@ -234,7 +232,7 @@ function Register() {
                 <div className="hidden md:flex w-1/2 bg-[#E8F5E9] items-center justify-center relative p-12">
                     <div className="absolute top-10 right-10 w-20 h-20 bg-[#C8E6C9] rounded-full opacity-50 blur-xl"></div>
                     <div className="absolute bottom-10 left-10 w-32 h-32 bg-[#A5D6A7] rounded-full opacity-50 blur-xl"></div>
-                    
+
                     <div className="relative z-10 flex flex-col items-center text-center">
                         <div className="w-40 h-40 bg-[#2E7D32] rounded-full flex items-center justify-center shadow-2xl mb-6">
                             <Heart size={80} color="white" fill="white" />
@@ -243,9 +241,9 @@ function Register() {
                             {role === 'NGO' ? 'Partner with Us' : 'Make a Difference'}
                         </h3>
                         <p className="text-[#2E7D32] max-w-xs">
-                            {role === 'NGO' 
-                             ? 'Join our network to reach more people and amplify your impact.' 
-                             : 'Join our community to help those in need and track your contributions.'}
+                            {role === 'NGO'
+                                ? 'Join our network to reach more people and amplify your impact.'
+                                : 'Join our community to help those in need and track your contributions.'}
                         </p>
                     </div>
                 </div>

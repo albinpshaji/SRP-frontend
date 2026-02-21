@@ -4,12 +4,12 @@ import { useParams, useNavigate, useLocation } from "react-router-dom";
 import donateVisual from '../../assets/loginimage.jpg';
 
 function Donateitems() {
-    const { id } = useParams(); 
+    const { id } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
 
     const isDirectDonation = Boolean(id);
-    
+
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [category, setCategory] = useState("Food");
@@ -67,7 +67,7 @@ function Donateitems() {
                 category,
                 logistics,
                 pickuplocation,
-                recepientid: isDirectDonation ? parseInt(id) : null 
+                recepientid: isDirectDonation ? parseInt(id) : null
             };
 
             formData.append("data", new Blob([JSON.stringify(donationData)], {
@@ -93,38 +93,38 @@ function Donateitems() {
     return (
         <div className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-[#FFF8F0] p-4 sm:p-8">
             <div className="flex flex-col md:flex-row w-full max-w-4xl bg-white rounded-[2rem] shadow-2xl overflow-hidden h-auto -mt-10 md:-mt-20">
-                
+
                 <div className="w-full md:w-1/2 h-48 md:h-auto bg-[#E8F5E9] relative order-1">
                     <img src={donateVisual} alt="Donation visual" className="w-full h-full object-cover" />
                     <div className="absolute inset-0 bg-black/20"></div>
                     <div className="absolute bottom-6 left-6 text-white p-4">
                         <h3 className="text-2xl font-bold">{isDirectDonation ? "Support an NGO" : "Public Marketplace"}</h3>
                         <p className="text-sm opacity-90">
-                            {isDirectDonation 
-                                ? "Your item will be sent directly to this organization." 
+                            {isDirectDonation
+                                ? "Your item will be sent directly to this organization."
                                 : "Any verified NGO can request this item from the marketplace."}
                         </p>
                     </div>
                 </div>
 
-                <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center order-2">
+                <div className="w-full md:w-1/2 p-6 md:p-12 flex flex-col justify-center order-2">
                     <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center md:text-left">{pageTitle}</h2>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
                             <label className="block text-sm font-semibold text-gray-600 mb-1">Item Title</label>
-                            <input 
-                                value={title} 
-                                onChange={(e) => setTitle(e.target.value)} 
-                                required 
-                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-600 outline-none" 
+                            <input
+                                value={title}
+                                onChange={(e) => setTitle(e.target.value)}
+                                required
+                                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-600 outline-none"
                                 placeholder="e.g. 20kg Rice Bags"
                             />
                         </div>
 
                         <div>
                             <label className="block text-sm font-semibold text-gray-600 mb-1">Item Image (JPG, PNG)</label>
-                            <input 
+                            <input
                                 type="file"
                                 accept=".jpg,.jpeg,.png"
                                 onChange={handleFileChange}
@@ -133,7 +133,7 @@ function Donateitems() {
                             />
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label className="block text-sm font-semibold text-gray-600 mb-1">Category</label>
                                 <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white">
@@ -156,9 +156,9 @@ function Donateitems() {
 
                         <div>
                             <label className="block text-sm font-semibold text-gray-600 mb-1">Pickup Address</label>
-                            <input 
-                                value={pickuplocation} 
-                                onChange={(e) => setPickupLocation(e.target.value)} 
+                            <input
+                                value={pickuplocation}
+                                onChange={(e) => setPickupLocation(e.target.value)}
                                 required={logistics === "Pickup"}
                                 disabled={logistics === "Dropoff"}
                                 className={`w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-600 outline-none ${logistics === 'Dropoff' ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : ''}`}
@@ -168,17 +168,17 @@ function Donateitems() {
 
                         <div>
                             <label className="block text-sm font-semibold text-gray-600 mb-1">Description</label>
-                            <textarea 
-                                value={description} 
-                                onChange={(e) => setDescription(e.target.value)} 
-                                rows="2" 
-                                className="w-full px-4 py-3 rounded-xl border border-gray-200 resize-none" 
+                            <textarea
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                                rows="2"
+                                className="w-full px-4 py-3 rounded-xl border border-gray-200 resize-none"
                                 placeholder="Details about quantity, condition, expiry..."
                             />
                         </div>
 
-                        <button 
-                            type='submit' 
+                        <button
+                            type='submit'
                             disabled={loading}
                             className="w-full bg-[#2E7D32] text-white py-4 rounded-xl font-bold text-lg hover:bg-[#1B5E20] transition-all shadow-lg active:scale-95 mt-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
                         >
