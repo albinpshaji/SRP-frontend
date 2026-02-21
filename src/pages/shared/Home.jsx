@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Camera, Handshake, Truck, ChevronDown } from 'lucide-react'; 
+import { Camera, Handshake, Truck, ChevronDown } from 'lucide-react';
 import heroImage from '../../assets/loginimage.jpg';
 
 const Home = () => {
@@ -13,7 +13,7 @@ const Home = () => {
 
   return (
     <div className="bg-[#FFF8F0] overflow-x-hidden">
-      
+
       <style>
         {`
           @keyframes fadeInUp {
@@ -36,10 +36,10 @@ const Home = () => {
           - pb-40: Added EXTRA padding at bottom so text doesn't overlap the arrow since we moved it up
       */}
       <div className="min-h-screen relative flex items-center justify-center pt-24 pb-40 md:pt-10 md:pb-32">
-        
+
         {/* Main Content */}
-        <div className="container mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-12 md:gap-20">
-          
+        <div className="container mx-auto px-4 md:px-6 flex flex-col md:flex-row items-center justify-between gap-12 md:gap-20">
+
           {/* Text Left */}
           <div className="w-full md:w-1/2 space-y-8 text-center md:text-left animate-fade-up delay-100">
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 leading-tight">
@@ -49,10 +49,10 @@ const Home = () => {
             <p className="text-lg text-gray-600 md:text-xl max-w-lg mx-auto md:mx-0 leading-relaxed animate-fade-up delay-200">
               Match Your Items Directly with NGO Needs.
             </p>
-            
+
             <div className="pt-4 animate-fade-up delay-300">
-              <Link 
-                to="/register" 
+              <Link
+                to="/register"
                 className="inline-block bg-[#2E7D32] text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-[#1B5E20] transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
               >
                 Start Donating Today
@@ -62,10 +62,10 @@ const Home = () => {
 
           {/* Image Right */}
           <div className="w-full md:w-1/2 flex justify-center md:justify-end animate-fade-up delay-300">
-            <img 
-              src={heroImage} 
-              alt="Sevana App Interface" 
-              className="w-full max-w-lg rounded-3xl shadow-2xl" 
+            <img
+              src={heroImage}
+              alt="Sevana App Interface"
+              className="w-full max-w-lg rounded-3xl shadow-2xl"
             />
           </div>
         </div>
@@ -75,7 +75,7 @@ const Home = () => {
             - left-0 w-full flex justify-center: Keeps it perfectly centered
         */}
         <div className="absolute bottom-16 left-0 w-full flex justify-center z-10 animate-fade-up delay-300">
-          <div 
+          <div
             onClick={handleScroll}
             className="flex flex-col items-center gap-2 cursor-pointer text-[#2E7D32] hover:text-[#1B5E20] transition-colors group"
           >
@@ -89,13 +89,13 @@ const Home = () => {
       </div>
 
       {/* Bottom Section - How it Works */}
-      <div id="how-it-works" className="container mx-auto px-6 py-24">
+      <div id="how-it-works" className="container mx-auto px-4 md:px-6 py-24">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-16">
           How Sevana Works
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          
+
           {/* Step 1 */}
           <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-md transition-shadow text-center flex flex-col items-center space-y-4 hover:-translate-y-1 duration-300">
             <div className="w-20 h-20 bg-green-50 rounded-2xl flex items-center justify-center mb-2">

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../../services/api"; 
-import DonationImage from "../../components/common/DonationImage"; 
+import api from "../../services/api";
+import DonationImage from "../../components/common/DonationImage";
 import { ArrowRight } from "lucide-react";
 
 function Marketplace() {
@@ -31,14 +31,14 @@ function Marketplace() {
         navigate(`/marketplace/${id}`, { state: { donation: item } });
     };
 
-    const filteredItems = filter === "All" 
-        ? items 
+    const filteredItems = filter === "All"
+        ? items
         : items.filter(item => item.category === filter);
 
     const categories = ["All", "Food", "Clothes", "Medicine", "Books", "Electronics", "Other"];
 
     return (
-        <div className="min-h-screen bg-[#FFF8F0] p-6 md:p-12">
+        <div className="min-h-screen bg-[#FFF8F0] p-4 md:p-12">
             <div className="max-w-7xl mx-auto">
                 <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
                     <div>
@@ -46,16 +46,16 @@ function Marketplace() {
                         <p className="text-gray-500 mt-1">Select items available for donation.</p>
                     </div>
                 </div>
-                
+
                 {/* Category Filters */}
                 <div className="flex space-x-4 border-b border-gray-200 mb-8 overflow-x-auto pb-2">
                     {categories.map((cat) => (
-                        <button 
-                            key={cat} 
-                            onClick={() => setFilter(cat)} 
+                        <button
+                            key={cat}
+                            onClick={() => setFilter(cat)}
                             className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap 
-                                ${filter === cat 
-                                    ? "bg-green-700 text-white shadow-md" 
+                                ${filter === cat
+                                    ? "bg-green-700 text-white shadow-md"
                                     : "bg-white text-gray-600 hover:bg-gray-100 border border-gray-200"}`}
                         >
                             {cat}
@@ -77,7 +77,7 @@ function Marketplace() {
 
                                 return (
                                     <div key={item.donationid} className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all overflow-hidden flex flex-col h-full border border-gray-100">
-                                        
+
                                         {/* Image */}
                                         <div className="h-56 w-full relative bg-gray-100">
                                             <DonationImage donationId={item.donationid} title={item.title} className="w-full h-full object-cover" />
@@ -91,7 +91,7 @@ function Marketplace() {
                                             <div className="flex justify-between items-start mb-2">
                                                 <h3 className="text-xl font-bold text-gray-800">{item.title}</h3>
                                             </div>
-                                            
+
                                             {/* REMOVED DESCRIPTION AS REQUESTED */}
 
                                             {/* Logistics & Location Section */}
@@ -112,7 +112,7 @@ function Marketplace() {
                                             </div>
 
                                             {/* View Details Button */}
-                                            <button 
+                                            <button
                                                 onClick={() => handleViewDetails(item)}
                                                 className="w-full flex items-center justify-center gap-2 bg-[#2E7D32] text-white py-3 rounded-lg font-bold hover:bg-[#1B5E20] transition-colors shadow-md active:scale-[0.98]"
                                             >
