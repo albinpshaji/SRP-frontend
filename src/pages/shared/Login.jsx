@@ -14,6 +14,7 @@ function Login() {
       const response = await api.post('/login', { username, password });
       localStorage.setItem('jwt_token', response.data.token);
       localStorage.setItem('role', response.data.role);
+      localStorage.setItem('userid', response.data.userid);
       alert("login succesfull, jwt saved");
       const role = response.data.role;
       if (role == "DONOR") {
