@@ -63,7 +63,7 @@ function Acceptngos() {
             <div className="max-w-7xl mx-auto">
                 <h1 className="text-3xl font-bold text-gray-800 mb-8">Verify NGOs</h1>
 
-                {/* Filter Tabs */}
+                
                 <div className="flex space-x-6 border-b border-gray-200 mb-8 overflow-x-auto">
                     {["All", "Pending", "Verified", "Rejected"].map((tab) => (
                         <button key={tab} onClick={() => setActiveTab(tab)} className={`pb-3 text-sm font-medium transition-colors relative whitespace-nowrap ${activeTab === tab ? "text-green-700 border-b-2 border-green-700" : "text-gray-500 hover:text-gray-700"}`}>
@@ -93,7 +93,7 @@ function Acceptngos() {
                                         <p className="text-gray-500 text-xs mb-4">ID: {u.userid}</p>
 
                                         <div className="mt-auto">
-                                            {/* VIEW BUTTON WITH ID IN URL */}
+                                           
                                             <button 
                                                 onClick={() => navigate(`/verifyngos/ngodetails/${u.userid}`, { state: { ngo: u } })} 
                                                 className="w-full flex items-center justify-center gap-2 mb-3 px-4 py-2 rounded-lg bg-blue-50 text-blue-700 hover:bg-blue-100 font-semibold transition-colors text-sm border border-blue-100"
@@ -101,7 +101,7 @@ function Acceptngos() {
                                                 <Eye size={16} /> View Profile & Proof
                                             </button>
 
-                                            {/* Action Buttons */}
+                                           
                                             {statusUpper === "PENDING" && (
                                                 <div className="grid grid-cols-2 gap-3">
                                                     <button onClick={() => rejectngos(u.userid)} className="flex items-center justify-center gap-2 px-4 py-2 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 font-semibold text-sm"><X size={16} /> Reject</button>
