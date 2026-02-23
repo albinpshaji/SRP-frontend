@@ -112,6 +112,38 @@ function DonationDetails() {
                         </div>
                     </div>
 
+                    {/* Logistics Tracking Banner */}
+                    {donation.logistics?.deliverystatus && (
+                        <div className={`border rounded-[1.5rem] p-5 flex items-center justify-between ${donation.logistics.deliverystatus === 'DELIVERED' ? 'bg-green-50 border-green-200' :
+                                donation.logistics.deliverystatus === 'RECEIVED' ? 'bg-teal-50 border-teal-200' :
+                                    donation.logistics.deliverystatus === 'IN_TRANSIT' ? 'bg-blue-50 border-blue-200' :
+                                        donation.logistics.deliverystatus === 'ACCEPTED' ? 'bg-purple-50 border-purple-200' :
+                                            'bg-orange-50 border-orange-200'
+                            }`}>
+                            <div className="flex items-center space-x-4">
+                                <div className={`p-4 rounded-full ${donation.logistics.deliverystatus === 'DELIVERED' ? 'bg-green-100 text-green-600' :
+                                        donation.logistics.deliverystatus === 'RECEIVED' ? 'bg-teal-100 text-teal-600' :
+                                            donation.logistics.deliverystatus === 'IN_TRANSIT' ? 'bg-blue-100 text-blue-600' :
+                                                donation.logistics.deliverystatus === 'ACCEPTED' ? 'bg-purple-100 text-purple-600' :
+                                                    'bg-orange-100 text-orange-600'
+                                    }`}>
+                                    <Truck className="w-6 h-6" />
+                                </div>
+                                <div>
+                                    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">Tracking Status</p>
+                                    <p className={`text-xl font-bold mt-1 tracking-tight ${donation.logistics.deliverystatus === 'DELIVERED' ? 'text-green-800' :
+                                            donation.logistics.deliverystatus === 'RECEIVED' ? 'text-teal-800' :
+                                                donation.logistics.deliverystatus === 'IN_TRANSIT' ? 'text-blue-800' :
+                                                    donation.logistics.deliverystatus === 'ACCEPTED' ? 'text-purple-800' :
+                                                        'text-orange-800'
+                                        }`}>
+                                        {donation.logistics.deliverystatus.replace("_", " ")}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {/* 3. Description & Details */}
                     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
                         <h3 className="text-xl font-bold text-gray-800 mb-4">Item Details</h3>
@@ -124,19 +156,30 @@ function DonationDetails() {
                                 <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Logistics Type</span>
                                 <div className="flex items-center mt-2 text-gray-700 font-medium">
                                     <Truck className="w-5 h-5 mr-2 text-green-600" />
-                                    {donation.logistics || "Not specified"}
+                                    {donation.logistics?.method || "Not specified"}
                                 </div>
                             </div>
 
-                            {donation.pickupLocation && (
+                            {donation.logistics?.addressLine && (
                                 <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
                                     <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Pickup Address</span>
                                     <div className="flex items-center mt-2 text-gray-700 font-medium">
                                         <MapPin className="w-5 h-5 mr-2 text-green-600" />
-                                        {donation.pickupLocation}
+                                        {donation.logistics.addressLine}
                                     </div>
                                 </div>
                             )}
+
+                            {donation.logistics?.pickupdate && (
+                                <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                                    <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Pickup Date</span>
+                                    <div className="flex items-center mt-2 text-gray-700 font-medium">
+                                        <Calendar className="w-5 h-5 mr-2 text-green-600" />
+                                        {new Date(donation.logistics.pickupdate).toLocaleString()}
+                                    </div>
+                                </div>
+                            )}
+
                         </div>
                     </div>
                 </div>

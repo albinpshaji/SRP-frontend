@@ -15,6 +15,7 @@ function Donateitems() {
     const [category, setCategory] = useState("Food");
     const [logistics, setLogistics] = useState("Dropoff");
     const [pickuplocation, setPickupLocation] = useState("");
+    const [pickupdate, setPickupdate] = useState("");
     const [imageFile, setImageFile] = useState(null);
     const [loading, setLoading] = useState(false);
 
@@ -22,10 +23,11 @@ function Donateitems() {
     const submitBtnText = isDirectDonation ? "Confirm Donation" : "List Item";
     const successRedirect = isDirectDonation ? "/ngos" : "/mydonations";
 
-    // CLEARS ADDRESS WHEN DROPOFF IS SELECTED
+    // CLEARS ADDRESS AND DATE WHEN DROPOFF IS SELECTED
     useEffect(() => {
         if (logistics === "Dropoff") {
             setPickupLocation("");
+            setPickupdate("");
         }
     }, [logistics]);
 
@@ -65,8 +67,11 @@ function Donateitems() {
                 title,
                 description,
                 category,
-                logistics,
-                pickuplocation,
+                logistics: {
+                    method: logistics,
+                    address_line: logistics === "Pickup" ? pickuplocation : null,
+                    pickupdate: logistics === "Pickup" && pickupdate ? pickupdate : null,
+                },
                 recepientid: isDirectDonation ? parseInt(id) : null
             };
 
@@ -165,6 +170,18 @@ function Donateitems() {
                                 placeholder={logistics === 'Dropoff' ? "Not applicable for drop-off" : "Enter pickup address"}
                             />
                         </div>
+
+                        {logistics === "Pickup" && (
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-600 mb-1">Preferred Pickup Date & Time</label>
+                                <input
+                                    type="datetime-local"
+                                    value={pickupdate}
+                                    onChange={(e) => setPickupdate(e.target.value)}
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-600 outline-none"
+                                />
+                            </div>
+                        )}
 
                         <div>
                             <label className="block text-sm font-semibold text-gray-600 mb-1">Description</label>
