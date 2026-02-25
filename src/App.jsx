@@ -19,6 +19,7 @@ import MarketplaceDetails from './pages/distributor/MarketplaceDetails';
 import Profile from './pages/shared/Profile';
 import NgoProfile from './pages/donor/NgoProfile';
 import Logistics from './pages/distributor/Logistics';
+import LogisticsDetails from './pages/distributor/LogisticsDetails';
 
 const router = createBrowserRouter([
   {
@@ -43,7 +44,8 @@ const router = createBrowserRouter([
       { path: "/marketplace/:id", element: (<Protectedroute><MarketplaceDetails /></Protectedroute>) },
       { path: "/profile", element: (<Protectedroute><Profile /></Protectedroute>) },
       { path: "/ngos/:id", element: (<Protectedroute><NgoProfile /></Protectedroute>) },
-      { path: "/logistics", element: (<Protectedroute><Logistics /></Protectedroute>) }
+      { path: "/logistics", element: (<Protectedroute><Logistics /></Protectedroute>) },
+      { path: "/logistics/:id", element: (<Protectedroute><LogisticsDetails /></Protectedroute>) }
     ]
   }
 ]);

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../../services/api";
 import { Truck, MapPin, Calendar, Package, RefreshCw, User } from "lucide-react";
 import DonationImage from "../../components/common/DonationImage";
@@ -15,6 +16,7 @@ function Logistics() {
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [updatingId, setUpdatingId] = useState(null);
+    const navigate = useNavigate();
 
     const fetchLogistics = async () => {
         try {
@@ -40,6 +42,12 @@ function Logistics() {
             alert("Failed to update status.");
         } finally {
             setUpdatingId(null);
+        }
+    };
+
+    const handleViewDetails = (donationId) => {
+        if (donationId) {
+            navigate(`/logistics/${donationId}`);
         }
     };
 
@@ -96,8 +104,17 @@ function Logistics() {
 
                                     {/* Image Section */}
                                     {item.donationId && (
-                                        <div className="h-48 w-full relative bg-gray-50 border-b border-gray-100 flex-shrink-0 overflow-hidden z-0">
+                                        <div
+                                            className="h-48 w-full relative bg-gray-50 border-b border-gray-100 flex-shrink-0 overflow-hidden z-0 cursor-pointer group"
+                                            onClick={() => handleViewDetails(item.donationId)}
+                                        >
                                             <DonationImage donationId={item.donationId} title={item.donationTitle} className="w-full h-full object-cover" />
+                                            {/* Hover Overlay */}
+                                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
+                                                <span className="opacity-0 group-hover:opacity-100 bg-white/95 px-4 py-1.5 rounded-full text-xs font-bold shadow-lg text-gray-800 transition-all transform translate-y-2 group-hover:translate-y-0 duration-300">
+                                                    View Details
+                                                </span>
+                                            </div>
                                         </div>
                                     )}
 
@@ -129,7 +146,7 @@ function Logistics() {
                                             <p className="font-semibold text-gray-800 mt-0.5">{item.method || "—"}</p>
                                         </div>
 
-                                        
+
                                         {item.addressLine && (
                                             <div className="flex items-start gap-2 text-sm text-gray-600">
                                                 <MapPin className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
