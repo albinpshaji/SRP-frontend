@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../../services/api";
-import { Truck, MapPin, Calendar, Package, RefreshCw } from "lucide-react";
+import { Truck, MapPin, Calendar, Package, RefreshCw, User } from "lucide-react";
+import DonationImage from "../../components/common/DonationImage";
 
 const statusColors = {
     PENDING: "bg-orange-100 text-orange-800",
@@ -93,20 +94,42 @@ function Logistics() {
                             return (
                                 <div key={item.logisticsid} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all flex flex-col">
 
+                                    {/* Image Section */}
+                                    {item.donationId && (
+                                        <div className="h-48 w-full relative bg-gray-50 border-b border-gray-100 flex-shrink-0 overflow-hidden z-0">
+                                            <DonationImage donationId={item.donationId} title={item.donationTitle} className="w-full h-full object-cover" />
+                                        </div>
+                                    )}
+
                                     {/* Status banner */}
-                                    <div className={`px-5 py-3 flex items-center justify-between ${statusColors[status] || "bg-gray-100 text-gray-700"}`}>
+                                    <div className={`px-5 py-3 flex items-center justify-between z-10 relative ${statusColors[status] || "bg-gray-100 text-gray-700"}`}>
                                         <span className="text-xs font-bold uppercase tracking-widest">{status.replace("_", " ")}</span>
                                         <Truck className="w-4 h-4 opacity-70" />
                                     </div>
 
                                     <div className="p-5 flex flex-col flex-grow gap-4">
+                                        {/* Donation Context */}
+                                        {item.donationTitle && (
+                                            <div className="mb-2 border-b border-gray-50 pb-4">
+                                                <h3 className="text-xl font-bold text-gray-800 line-clamp-2 leading-tight pt-1">{item.donationTitle}</h3>
+                                                <div className="flex items-center gap-3 mt-2 text-sm text-gray-500 font-medium">
+                                                    <span className="bg-gray-100 px-2 py-0.5 rounded text-xs">{item.category || "General Item"}</span>
+                                                    {item.donorUsername && (
+                                                        <span className="flex items-center gap-1">
+                                                            <User className="w-3.5 h-3.5" />
+                                                            {item.donorUsername}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        )}
                                         {/* Method */}
                                         <div>
                                             <span className="text-xs font-semibold text-gray-400 uppercase">Method</span>
                                             <p className="font-semibold text-gray-800 mt-0.5">{item.method || "—"}</p>
                                         </div>
 
-                                        {/* Address */}
+                                        
                                         {item.addressLine && (
                                             <div className="flex items-start gap-2 text-sm text-gray-600">
                                                 <MapPin className="w-4 h-4 text-gray-400 mt-0.5 flex-shrink-0" />
