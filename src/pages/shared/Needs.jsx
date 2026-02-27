@@ -83,6 +83,19 @@ const Needs = () => {
                                     </div>
 
                                     <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-[#2E7D32] transition-colors">{need.title}</h3>
+
+                                    <div className="mb-3">
+                                        <div className="flex justify-between text-xs font-bold text-gray-500 mb-1 leading-tight">
+                                            <span>Fulfilled Progress</span>
+                                            <span>{need.fulfilledQuantity || 0} / {need.quantity}</span>
+                                        </div>
+                                        <div className="w-full bg-gray-200 rounded-full h-2">
+                                            <div
+                                                className="bg-[#2E7D32] h-2 rounded-full"
+                                                style={{ width: `${Math.min(((need.fulfilledQuantity || 0) / need.quantity) * 100, 100)}%` }}
+                                            ></div>
+                                        </div>
+                                    </div>
                                     <div className="flex items-center gap-2 mb-4">
                                         <span className="bg-indigo-50 text-indigo-600 px-2.5 py-1 rounded-lg text-xs font-semibold">{need.category}</span>
                                         <span className="text-sm font-medium text-gray-500 bg-gray-50 px-2.5 py-1 rounded-lg">{need.quantity} required</span>
@@ -112,7 +125,10 @@ const Needs = () => {
 
                                 {role === 'DONOR' && (
                                     <div className="p-4 bg-gray-50 border-t border-gray-100">
-                                        <button className="w-full bg-white text-[#2E7D32] border-2 border-[#2E7D32] py-2.5 rounded-xl font-bold hover:bg-[#2E7D32] hover:text-white transition-colors duration-300 shadow-sm">
+                                        <button
+                                            onClick={() => navigate(`/donate/${need.userid}`, { state: { requirement: need } })}
+                                            className="w-full bg-white text-[#2E7D32] border-2 border-[#2E7D32] py-2.5 rounded-xl font-bold hover:bg-[#2E7D32] hover:text-white transition-colors duration-300 shadow-sm"
+                                        >
                                             Donate Now
                                         </button>
                                     </div>
