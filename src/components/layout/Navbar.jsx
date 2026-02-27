@@ -87,6 +87,7 @@ const Navbar = () => {
           <>
             <Link to="/ngos" className={navlink}>Find NGOs</Link>
             <Link to="/mydonations" className={navlink}>My Donations</Link>
+            <Link to="/needs" className={navlink}>Needs</Link>
             {renderProfileDropdown()}
           </>
         );
@@ -98,6 +99,7 @@ const Navbar = () => {
             <Link to="/incomingdonations" className={navlink}>Incoming Donations</Link>
             <Link to="/marketplace" className={navlink}>MarketPlace</Link>
             <Link to="/logistics" className={navlink}>Logistics</Link>
+            <Link to="/needs" className={navlink}>Needs</Link>
             {renderProfileDropdown()}
           </>
         );

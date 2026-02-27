@@ -79,14 +79,29 @@ function MarketplaceDetails() {
                             <div className="p-4 bg-blue-50 rounded-xl border border-blue-100">
                                 <span className="text-xs font-bold text-blue-400 uppercase">Logistics Method</span>
                                 <div className="flex items-center mt-1 text-blue-900 font-semibold">
-                                    <Truck className="w-5 h-5 mr-2" /> {donation.logistics}
+                                    <Truck className="w-5 h-5 mr-2" /> {donation.logistics?.method || "Not specified"}
                                 </div>
                             </div>
-                            {donation.pickupLocation && donation.logistics === 'Pickup' && (
+                            {donation.logistics?.addressLine && (
                                 <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
                                     <span className="text-xs font-bold text-gray-400 uppercase">Pickup Location</span>
                                     <div className="flex items-center mt-1 text-gray-700 font-semibold">
-                                        <MapPin className="w-5 h-5 mr-2" /> {donation.pickupLocation}
+                                        <MapPin className="w-5 h-5 mr-2" /> {donation.logistics.addressLine}
+                                    </div>
+                                </div>
+                            )}
+                            {donation.logistics?.deliverystatus && (
+                                <div className="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                                    <span className="text-xs font-bold text-gray-400 uppercase">Delivery Status</span>
+                                    <div className="mt-2">
+                                        <span className={`px-3 py-1 rounded-full text-xs font-bold ${donation.logistics.deliverystatus === 'DELIVERED' ? 'bg-green-100 text-green-800' :
+                                            donation.logistics.deliverystatus === 'RECEIVED' ? 'bg-teal-100 text-teal-800' :
+                                                donation.logistics.deliverystatus === 'IN_TRANSIT' ? 'bg-blue-100 text-blue-800' :
+                                                    donation.logistics.deliverystatus === 'ACCEPTED' ? 'bg-purple-100 text-purple-800' :
+                                                        'bg-orange-100 text-orange-800'
+                                            }`}>
+                                            {donation.logistics.deliverystatus}
+                                        </span>
                                     </div>
                                 </div>
                             )}

@@ -18,6 +18,10 @@ import Marketplace from './pages/distributor/Marketplace';
 import MarketplaceDetails from './pages/distributor/MarketplaceDetails';
 import Profile from './pages/shared/Profile';
 import NgoProfile from './pages/donor/NgoProfile';
+import Logistics from './pages/distributor/Logistics';
+import LogisticsDetails from './pages/distributor/LogisticsDetails';
+import Needs from './pages/shared/Needs';
+import UploadNeed from './pages/shared/UploadNeed';
 
 const router = createBrowserRouter([
   {
@@ -41,7 +45,11 @@ const router = createBrowserRouter([
       { path: "/marketplace", element: (<Protectedroute><Marketplace /></Protectedroute>) },
       { path: "/marketplace/:id", element: (<Protectedroute><MarketplaceDetails /></Protectedroute>) },
       { path: "/profile", element: (<Protectedroute><Profile /></Protectedroute>) },
-      { path: "/ngos/:id", element: (<Protectedroute><NgoProfile /></Protectedroute>) }
+      { path: "/ngos/:id", element: (<Protectedroute><NgoProfile /></Protectedroute>) },
+      { path: "/logistics", element: (<Protectedroute><Logistics /></Protectedroute>) },
+      { path: "/logistics/:id", element: (<Protectedroute><LogisticsDetails /></Protectedroute>) },
+      { path: "/needs", element: (<Protectedroute><Needs /></Protectedroute>) },
+      { path: "/upload-need", element: (<Protectedroute><UploadNeed /></Protectedroute>) }
     ]
   }
 ]);

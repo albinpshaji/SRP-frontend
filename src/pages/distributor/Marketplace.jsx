@@ -70,8 +70,8 @@ function Marketplace() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {filteredItems.length > 0 ? (
                             filteredItems.map((item) => {
-                                const isPickup = item.logistics === "Pickup";
-                                const locationDisplay = isPickup ? item.pickupLocation : "Donor will deliver (Drop-off)";
+                                const isPickup = item.logistics?.method === "Pickup";
+                                const locationDisplay = isPickup ? item.logistics?.addressLine : "Donor will deliver (Drop-off)";
                                 const logisticsLabel = isPickup ? "Pickup Required" : "Drop-off";
                                 const logisticsColor = isPickup ? "text-orange-700 bg-orange-50" : "text-blue-700 bg-blue-50";
 

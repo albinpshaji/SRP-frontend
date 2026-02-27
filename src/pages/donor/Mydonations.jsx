@@ -20,15 +20,35 @@ function Mydonations() {
 
     useEffect(() => { getmydonations(); }, []);
 
-    const filteredDonations = activeTab === "All"
-        ? donations
-        : donations.filter((d) => d.status?.toUpperCase() === activeTab.toUpperCase());
+    const getEffectiveStatus = (donation) => {
+        if (donation.status?.toUpperCase() === "REJECTED") return "REJECTED";
+        if (donation.status?.toUpperCase() === "PENDING") return "PENDING";
+
+        // If it's accepted, the logistics status is more informative
+        if (donation.status?.toUpperCase() === "ACCEPTED" && donation.logistics?.deliverystatus) {
+            return donation.logistics.deliverystatus.toUpperCase();
+        }
+        return donation.status?.toUpperCase() || "UNKNOWN";
+    };
+
+    const filteredDonations = donations.filter((d) => {
+        if (activeTab === "All") return true;
+        const tabKey = activeTab.replace(" ", "_").toUpperCase();
+
+        const status = getEffectiveStatus(d);
+        if (tabKey === "DELIVERED" && (status === "DELIVERED" || status === "RECEIVED")) return true;
+
+        return status === tabKey;
+    });
 
     const getStatusStyles = (status) => {
         switch (status?.toUpperCase()) {
-            case "PENDING": return { border: "border-l-orange-500", badge: "bg-orange-100 text-orange-700" };
-            case "ACCEPTED": return { border: "border-l-green-600", badge: "bg-green-100 text-green-700" };
-            case "REJECTED": return { border: "border-l-red-500", badge: "bg-red-100 text-red-700" };
+            case "PENDING": return { border: "border-l-orange-500", badge: "bg-orange-100 text-orange-800" };
+            case "ACCEPTED": return { border: "border-l-purple-500", badge: "bg-purple-100 text-purple-800" };
+            case "IN_TRANSIT": return { border: "border-l-blue-500", badge: "bg-blue-100 text-blue-800" };
+            case "DELIVERED": return { border: "border-l-green-500", badge: "bg-green-100 text-green-800" };
+            case "RECEIVED": return { border: "border-l-teal-500", badge: "bg-teal-100 text-teal-800" };
+            case "REJECTED": return { border: "border-l-red-500", badge: "bg-red-100 text-red-800" };
             default: return { border: "border-l-gray-400", badge: "bg-gray-100 text-gray-700" };
         }
     };
@@ -51,8 +71,8 @@ function Mydonations() {
                     </button>
                 </div>
 
-                <div className="flex space-x-6 border-b border-gray-200 mb-8 overflow-x-auto">
-                    {["All", "Pending", "Accepted", "Rejected"].map((tab) => (
+                <div className="flex space-x-6 border-b border-gray-200 mb-8 overflow-x-auto scroolbar-hide">
+                    {["All", "Pending", "Accepted", "In Transit", "Delivered", "Rejected"].map((tab) => (
                         <button key={tab} onClick={() => setActiveTab(tab)} className={`pb-3 text-sm font-medium transition-colors relative whitespace-nowrap ${activeTab === tab ? "text-green-700 border-b-2 border-green-700" : "text-gray-500 hover:text-gray-700"}`}>{tab}</button>
                     ))}
                 </div>
@@ -60,7 +80,8 @@ function Mydonations() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredDonations.length > 0 ? (
                         filteredDonations.map((donation) => {
-                            const styles = getStatusStyles(donation.status);
+                            const effectiveStatus = getEffectiveStatus(donation);
+                            const styles = getStatusStyles(effectiveStatus);
                             const id = donation.donationid || donation.id;
 
                             return (
@@ -72,7 +93,7 @@ function Mydonations() {
 
                                     <div className="p-5">
                                         <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mb-3 ${styles.badge}`}>
-                                            {donation.status?.toUpperCase() || "UNKNOWN"}
+                                            {effectiveStatus.replace("_", " ")}
                                         </span>
                                         <h3 className="text-xl font-bold text-gray-800 mb-1">{donation.title}</h3>
                                         <p className="text-gray-500 text-sm mb-4 line-clamp-2">{donation.description}</p>
