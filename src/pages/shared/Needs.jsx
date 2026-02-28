@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
+import { useToast } from '../../context/ToastContext';
 
 const Needs = () => {
     const [needs, setNeeds] = useState([]);
     const [loading, setLoading] = useState(true);
     const role = localStorage.getItem('role')?.toUpperCase();
     const navigate = useNavigate();
+    const { showToast } = useToast();
 
     useEffect(() => {
         fetchNeeds();
@@ -36,10 +38,11 @@ const Needs = () => {
 
         try {
             await api.delete(`/requirements/${reqId}`);
+            showToast("Requirement deleted successfully", "success");
             fetchNeeds();
         } catch (error) {
             console.error('Error deleting requirement:', error);
-            alert("Failed to delete requirement.");
+            showToast("Failed to delete requirement.", "error");
         }
     };
 

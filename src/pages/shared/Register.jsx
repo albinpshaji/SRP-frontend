@@ -2,6 +2,7 @@ import { useState } from "react";
 import api from "../../services/api";
 import { Link, useNavigate } from "react-router-dom";
 import { Heart, Camera, Upload } from "lucide-react";
+import { useToast } from "../../context/ToastContext";
 
 function Register() {
     const [username, setUsername] = useState('');
@@ -19,6 +20,7 @@ function Register() {
     const [profilePic, setProfilePic] = useState(null);
 
     const navigate = useNavigate();
+    const { showToast } = useToast();
 
     const handleregister = async (e) => {
         e.preventDefault();
@@ -53,12 +55,12 @@ function Register() {
             await api.post('/register', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
-            alert("Registered successfully!");
+            showToast("Registered successfully!", "success");
             navigate('/login');
         } catch (error) {
             console.error("Registration failed", error);
             const msg = error.response?.data || "Unknown error";
-            alert("Registration failed: " + msg);
+            showToast("Registration failed: " + msg, "error");
         }
     };
 

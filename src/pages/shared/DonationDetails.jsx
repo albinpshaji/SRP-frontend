@@ -6,9 +6,12 @@ import {
     Phone, Building2, User, CheckCircle2, XCircle, Clock, Trash2
 } from "lucide-react";
 import DonationImage from "../../components/common/DonationImage";
+import { useToast } from "../../context/ToastContext";
+
 function DonationDetails() {
     const location = useLocation();
     const navigate = useNavigate();
+    const { showToast } = useToast();
     const [isDeleting, setIsDeleting] = useState(false);
 
     // 1. Get Data safely
@@ -68,10 +71,11 @@ function DonationDetails() {
         setIsDeleting(true);
         try {
             await api.delete(`/mydonations/${id}`);
+            showToast("Donation deleted successfully", "success");
             navigate('/mydonations');
         } catch (error) {
             console.error("Error deleting donation:", error);
-            alert("Failed to delete donation.");
+            showToast("Failed to delete donation.", "error");
             setIsDeleting(false);
         }
     };

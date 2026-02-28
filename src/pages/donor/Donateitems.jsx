@@ -2,11 +2,13 @@ import { useState, useEffect } from "react";
 import api from "../../services/api";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import donateVisual from '../../assets/loginimage.jpg';
+import { useToast } from "../../context/ToastContext";
 
 function Donateitems() {
     const { id } = useParams();
     const navigate = useNavigate();
     const location = useLocation();
+    const { showToast } = useToast();
 
     // Check if a requirement object was passed via React Router state (from Needs.jsx)
     const requirement = location.state?.requirement;
@@ -43,7 +45,7 @@ function Donateitems() {
         if (file) {
             const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
             if (!allowedTypes.includes(file.type)) {
-                alert("Please upload a valid image (JPG, JPEG, or PNG).");
+                showToast("Please upload a valid image (JPG, JPEG, or PNG).", "error");
                 e.target.value = null;
                 return;
             }
@@ -55,13 +57,13 @@ function Donateitems() {
         e.preventDefault();
 
         if (!imageFile) {
-            alert("Please upload an image of the item.");
+            showToast("Please upload an image of the item.", "error");
             return;
         }
 
         // Final check to ensure no address is sent if dropoff
         if (logistics === "Pickup" && !pickuplocation.trim()) {
-            alert("Please enter a pickup address.");
+            showToast("Please enter a pickup address.", "error");
             return;
         }
 
@@ -94,11 +96,11 @@ function Donateitems() {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
-            alert(isDirectDonation ? 'Donation submitted successfully!' : 'Item listed in marketplace successfully!');
+            showToast(isDirectDonation ? 'Donation submitted successfully!' : 'Item listed in marketplace successfully!', "success");
             navigate(successRedirect);
         } catch (error) {
             console.error("Upload failed:", error.response?.data || error.message);
-            alert("Failed to submit: " + (error.response?.data || "Server Error"));
+            showToast("Failed to submit: " + (error.response?.data || "Server Error"), "error");
         } finally {
             setLoading(false);
         }
@@ -197,34 +199,33 @@ function Donateitems() {
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className={`grid grid-cols-1 ${requirement ? 'md:grid-cols-1' : 'md:grid-cols-2'} gap-4`}>
-                                {!requirement && (
-                                    <div>
-                                        <label className="block text-sm font-semibold text-gray-600 mb-1">Category</label>
-                                        <select
-                                            value={category}
-                                            onChange={(e) => setCategory(e.target.value)}
-                                            className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:ring-2 focus:ring-green-600 outline-none"
-                                        >
-                                            <option value="Food">Food</option>
-                                            <option value="Clothes">Clothes</option>
-                                            <option value="Medicine">Medicine</option>
-                                            <option value="Books">Books</option>
-                                            <option value="Electronics">Electronics</option>
-                                            <option value="Other">Other</option>
-                                        </select>
-                                    </div>
-                                )}
+                            {!requirement && (
                                 <div>
-                                    <label className="block text-sm font-semibold text-gray-600 mb-1">Logistics</label>
-                                    <select value={logistics} onChange={(e) => setLogistics(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white">
-                                        <option value="Dropoff">I will Drop-off</option>
-                                        <option value="Pickup">Pickup Required</option>
+                                    <label className="block text-sm font-semibold text-gray-600 mb-1">Category</label>
+                                    <select
+                                        value={category}
+                                        onChange={(e) => setCategory(e.target.value)}
+                                        className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:ring-2 focus:ring-green-600 outline-none"
+                                    >
+                                        <option value="Food">Food</option>
+                                        <option value="Clothes">Clothes</option>
+                                        <option value="Medicine">Medicine</option>
+                                        <option value="Books">Books</option>
+                                        <option value="Electronics">Electronics</option>
+                                        <option value="Other">Other</option>
                                     </select>
                                 </div>
-                            </div>
+                            )}
 
                             <div>
+                                <label className="block text-sm font-semibold text-gray-600 mb-1">Logistics</label>
+                                <select value={logistics} onChange={(e) => setLogistics(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:ring-2 focus:ring-green-600 outline-none">
+                                    <option value="Dropoff">I will Drop-off</option>
+                                    <option value="Pickup">Pickup Required</option>
+                                </select>
+                            </div>
+
+                            <div className={`transition-all duration-500 ease-in-out ${requirement ? 'md:col-span-1' : 'md:col-span-2'}`}>
                                 <label className="block text-sm font-semibold text-gray-600 mb-1">Pickup Address</label>
                                 <input
                                     value={pickuplocation}
@@ -237,7 +238,7 @@ function Donateitems() {
                             </div>
 
                             <div
-                                className={`transition-all duration-500 ease-in-out overflow-hidden ${logistics === 'Pickup' ? 'max-h-32 opacity-100' : 'max-h-0 opacity-0'}`}
+                                className={`transition-all duration-500 ease-in-out md:col-span-2 overflow-hidden ${logistics === 'Pickup' ? 'max-h-32 opacity-100' : 'max-h-0 opacity-0'}`}
                             >
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-600 mb-1">Preferred Pickup Date & Time</label>
@@ -249,8 +250,6 @@ function Donateitems() {
                                     />
                                 </div>
                             </div>
-
-
                         </div>
 
                         <div>

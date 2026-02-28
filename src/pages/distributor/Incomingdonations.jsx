@@ -2,6 +2,7 @@ import api from "../../services/api";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Check, X, Package, Loader2 } from "lucide-react";
+import { useToast } from "../../context/ToastContext";
 
 // --- 1. Helper Component for Secure Image Fetching ---
 // (Integrated directly for ease of use)
@@ -84,6 +85,7 @@ function Incomingdonations() {
 
     // Initialize Navigation Hook
     const navigate = useNavigate();
+    const { showToast } = useToast();
 
     const incomingdonations = async () => {
         try {
@@ -99,10 +101,10 @@ function Incomingdonations() {
         try {
             await api.put(`/incomingdonations/${id}`, { status: "rejected" });
             setrefresh(prev => !prev);
-            alert("Donation Rejected");
+            showToast("Donation Rejected", "success");
         } catch (error) {
             console.log(error.response?.data);
-            alert("Failed to reject donation");
+            showToast("Failed to reject donation", "error");
         }
     }
 
@@ -110,10 +112,10 @@ function Incomingdonations() {
         try {
             await api.put(`/incomingdonations/${id}`, { status: "accepted" });
             setrefresh(prev => !prev);
-            alert("Donation Accepted");
+            showToast("Donation Accepted", "success");
         } catch (error) {
             console.log(error.response?.data);
-            alert("Failed to accept donation");
+            showToast("Failed to accept donation", "error");
         }
     }
 

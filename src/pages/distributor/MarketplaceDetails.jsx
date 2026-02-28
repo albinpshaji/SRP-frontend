@@ -6,10 +6,12 @@ import {
 } from "lucide-react";
 import DonationImage from "../../components/common/DonationImage";
 import api from "../../services/api";
+import { useToast } from "../../context/ToastContext";
 
 function MarketplaceDetails() {
     const location = useLocation();
     const navigate = useNavigate();
+    const { showToast } = useToast();
     const [isLoading, setIsLoading] = useState(false);
 
     const donation = location.state?.donation;
@@ -34,11 +36,11 @@ function MarketplaceDetails() {
         setIsLoading(true);
         try {
             await api.put(`/ngos/marketplace/claim/${id}`);
-            alert(`Item successfully claimed!`);
+            showToast(`Item successfully claimed!`, "success");
             navigate('/marketplace');
         } catch (error) {
             console.error(error);
-            alert("Failed to claim item. It might have been taken already.");
+            showToast("Failed to claim item. It might have been taken already.", "error");
             navigate('/marketplace');
         } finally {
             setIsLoading(false);

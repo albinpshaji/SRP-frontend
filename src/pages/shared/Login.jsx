@@ -2,11 +2,13 @@ import { useState } from "react";
 import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import loginVisual from "../../assets/loginimage.jpg";
+import { useToast } from "../../context/ToastContext";
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const { showToast } = useToast();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -15,7 +17,7 @@ function Login() {
       localStorage.setItem('jwt_token', response.data.token);
       localStorage.setItem('role', response.data.role);
       localStorage.setItem('userid', response.data.userid);
-      alert("login succesfull, jwt saved");
+      showToast("Login successful!", "success");
       const role = response.data.role;
       if (role == "DONOR") {
         navigate('/mydonations');
@@ -36,7 +38,7 @@ function Login() {
     }
     catch (error) {
       console.log("login failed!!", error);
-      alert("Login failed" + (error.response?.data?.message) || "Unknown error");
+      showToast("Login failed: " + (error.response?.data?.message || "Unknown error"), "error");
     }
   };
 

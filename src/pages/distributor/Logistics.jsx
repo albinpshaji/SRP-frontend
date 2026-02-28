@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../services/api";
 import { Truck, MapPin, Calendar, Package, RefreshCw, User } from "lucide-react";
 import DonationImage from "../../components/common/DonationImage";
+import { useToast } from "../../context/ToastContext";
 
 const statusColors = {
     PENDING: "bg-orange-100 text-orange-800",
@@ -17,6 +18,7 @@ function Logistics() {
     const [loading, setLoading] = useState(true);
     const [updatingId, setUpdatingId] = useState(null);
     const navigate = useNavigate();
+    const { showToast } = useToast();
 
     const fetchLogistics = async () => {
         try {
@@ -38,8 +40,9 @@ function Logistics() {
             setItems(prev =>
                 prev.map(l => l.logisticsid === logisticsid ? { ...l, deliverystatus: newStatus } : l)
             );
+            showToast(`Status updated to ${newStatus.replace("_", " ")}`, "success");
         } catch (err) {
-            alert("Failed to update status.");
+            showToast("Failed to update status.", "error");
         } finally {
             setUpdatingId(null);
         }
