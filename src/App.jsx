@@ -22,6 +22,7 @@ import Logistics from './pages/distributor/Logistics';
 import LogisticsDetails from './pages/distributor/LogisticsDetails';
 import Needs from './pages/shared/Needs';
 import UploadNeed from './pages/shared/UploadNeed';
+import Feedback from './pages/admin/Feedback';
 
 const router = createBrowserRouter([
   {
@@ -49,7 +50,8 @@ const router = createBrowserRouter([
       { path: "/logistics", element: (<Protectedroute><Logistics /></Protectedroute>) },
       { path: "/logistics/:id", element: (<Protectedroute><LogisticsDetails /></Protectedroute>) },
       { path: "/needs", element: (<Protectedroute><Needs /></Protectedroute>) },
-      { path: "/upload-need", element: (<Protectedroute><UploadNeed /></Protectedroute>) }
+      { path: "/upload-need", element: (<Protectedroute><UploadNeed /></Protectedroute>) },
+      { path: "/feedback", element: (<Protectedroute><Feedback /></Protectedroute>) }
     ]
   }
 ]);
