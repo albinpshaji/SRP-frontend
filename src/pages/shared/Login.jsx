@@ -62,11 +62,11 @@ function Login() {
 
         <form onSubmit={handleLogin} className="space-y-4 md:space-y-6">
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold text-gray-600">Email Address</label>
+            <label className="text-sm font-semibold text-gray-600">Username</label>
             <input
               type="text"
               className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-600 outline-none transition-all"
-              placeholder="user@demo.com"
+              placeholder="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
