@@ -27,13 +27,13 @@ function Register() {
 
         const formData = new FormData();
         const userDto = {
-            username,
-            password,
+            username: username.trim(),
+            password: password.trim(),
             role,
-            phone,
-            location,
-            licenceno: role === 'NGO' ? licenceno : null,
-            website: role === 'NGO' ? website : null
+            phone: phone.trim(),
+            location: location.trim(),
+            licenceno: role === 'NGO' && licenceno ? licenceno.trim() : null,
+            website: role === 'NGO' && website ? website.trim() : null
         };
 
 

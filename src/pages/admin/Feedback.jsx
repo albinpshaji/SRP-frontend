@@ -86,10 +86,10 @@ function Feedback() {
                                     </span>
                                 </div>
 
-                                <div className="flex-grow">
+                                <div className="flex-grow w-full overflow-hidden">
                                     <p className="text-xs text-gray-400 mb-2">{new Date(f.createdAt).toLocaleString()}</p>
-                                    <h4 className="font-semibold text-gray-800 mb-2">{f.subject}</h4>
-                                    <p className="text-gray-600 text-sm whitespace-pre-wrap">{f.message}</p>
+                                    <h4 className="font-semibold text-gray-800 mb-2 break-words">{f.subject}</h4>
+                                    <p className="text-gray-600 text-sm whitespace-pre-wrap break-words break-all">{f.message}</p>
                                 </div>
 
                                 {f.status === 'OPEN' ? (
