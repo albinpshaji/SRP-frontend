@@ -6,10 +6,12 @@ import {
 } from "lucide-react";
 import DonationImage from "../../components/common/DonationImage";
 import api from "../../services/api"; // Ensure you import your API service
+import { useToast } from "../../context/ToastContext";
 
 function IncomingDonationDetails() {
     const location = useLocation();
     const navigate = useNavigate();
+    const { showToast } = useToast();
     const [isLoading, setIsLoading] = useState(false);
 
     // 1. Get Data from Router State
@@ -39,10 +41,10 @@ function IncomingDonationDetails() {
         try {
             await api.put(`/incomingdonations/${id}`, { status: newStatus.toLowerCase() });
             setCurrentStatus(newStatus); // Update UI instantly
-            alert(`Donation ${newStatus.toLowerCase()} successfully.`);
+            showToast(`Donation ${newStatus.toLowerCase()} successfully.`, "success");
         } catch (error) {
             console.error(error);
-            alert("Failed to update status.");
+            showToast("Failed to update status.", "error");
         } finally {
             setIsLoading(false);
         }

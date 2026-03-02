@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
+import { useToast } from '../../context/ToastContext';
 
 const UploadNeed = () => {
     const navigate = useNavigate();
+    const { showToast } = useToast();
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         title: '',
@@ -29,10 +31,11 @@ const UploadNeed = () => {
                 ...formData,
                 quantity: parseInt(formData.quantity)
             });
+            showToast("Requirement posted successfully!", "success");
             navigate('/needs');
         } catch (error) {
             console.error('Error posting need:', error);
-            alert('Failed to post requirement. Please try again.');
+            showToast('Failed to post requirement. Please try again.', 'error');
         } finally {
             setLoading(false);
         }

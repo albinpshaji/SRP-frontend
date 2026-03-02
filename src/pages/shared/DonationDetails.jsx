@@ -1,12 +1,18 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import api from "../../services/api";
 import {
     ArrowLeft, Calendar, MapPin, Package, Truck,
-    Phone, Building2, User, CheckCircle2, XCircle, Clock
+    Phone, Building2, User, CheckCircle2, XCircle, Clock, Trash2
 } from "lucide-react";
 import DonationImage from "../../components/common/DonationImage";
+import { useToast } from "../../context/ToastContext";
+
 function DonationDetails() {
     const location = useLocation();
     const navigate = useNavigate();
+    const { showToast } = useToast();
+    const [isDeleting, setIsDeleting] = useState(false);
 
     // 1. Get Data safely
     const donation = location.state?.donation;
@@ -59,11 +65,26 @@ function DonationDetails() {
 
     const statusConfig = getStatusConfig(status);
 
+    const handleDelete = async () => {
+        if (!window.confirm("Are you sure you want to delete this donation?")) return;
+
+        setIsDeleting(true);
+        try {
+            await api.delete(`/mydonations/${id}`);
+            showToast("Donation deleted successfully", "success");
+            navigate('/mydonations');
+        } catch (error) {
+            console.error("Error deleting donation:", error);
+            showToast("Failed to delete donation.", "error");
+            setIsDeleting(false);
+        }
+    };
+
     return (
         <div className="min-h-screen bg-[#FFF8F0] p-4 md:p-8 font-sans">
 
             {/* Top Navigation */}
-            <div className="max-w-6xl mx-auto mb-6">
+            <div className="max-w-6xl mx-auto mb-6 flex justify-between items-center">
                 <button
                     onClick={() => navigate(-1)}
                     className="flex items-center text-gray-600 hover:text-green-700 font-medium transition-colors"
@@ -71,6 +92,17 @@ function DonationDetails() {
                     <ArrowLeft className="w-5 h-5 mr-2" />
                     Back to Donations
                 </button>
+
+                {donation?.logistics?.deliverystatus !== "IN_TRANSIT" && donation?.logistics?.deliverystatus !== "DELIVERED" && (
+                    <button
+                        onClick={handleDelete}
+                        disabled={isDeleting}
+                        className="flex items-center px-4 py-2 bg-red-50 text-red-600 font-medium rounded-lg hover:bg-red-100 transition-colors disabled:opacity-50"
+                    >
+                        <Trash2 className="w-4 h-4 mr-2" />
+                        {isDeleting ? "Deleting..." : "Delete Donation"}
+                    </button>
+                )}
             </div>
 
             <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -115,27 +147,27 @@ function DonationDetails() {
                     {/* Logistics Tracking Banner */}
                     {donation.logistics?.deliverystatus && (
                         <div className={`border rounded-[1.5rem] p-5 flex items-center justify-between ${donation.logistics.deliverystatus === 'DELIVERED' ? 'bg-green-50 border-green-200' :
-                                donation.logistics.deliverystatus === 'RECEIVED' ? 'bg-teal-50 border-teal-200' :
-                                    donation.logistics.deliverystatus === 'IN_TRANSIT' ? 'bg-blue-50 border-blue-200' :
-                                        donation.logistics.deliverystatus === 'ACCEPTED' ? 'bg-purple-50 border-purple-200' :
-                                            'bg-orange-50 border-orange-200'
+                            donation.logistics.deliverystatus === 'RECEIVED' ? 'bg-teal-50 border-teal-200' :
+                                donation.logistics.deliverystatus === 'IN_TRANSIT' ? 'bg-blue-50 border-blue-200' :
+                                    donation.logistics.deliverystatus === 'ACCEPTED' ? 'bg-purple-50 border-purple-200' :
+                                        'bg-orange-50 border-orange-200'
                             }`}>
                             <div className="flex items-center space-x-4">
                                 <div className={`p-4 rounded-full ${donation.logistics.deliverystatus === 'DELIVERED' ? 'bg-green-100 text-green-600' :
-                                        donation.logistics.deliverystatus === 'RECEIVED' ? 'bg-teal-100 text-teal-600' :
-                                            donation.logistics.deliverystatus === 'IN_TRANSIT' ? 'bg-blue-100 text-blue-600' :
-                                                donation.logistics.deliverystatus === 'ACCEPTED' ? 'bg-purple-100 text-purple-600' :
-                                                    'bg-orange-100 text-orange-600'
+                                    donation.logistics.deliverystatus === 'RECEIVED' ? 'bg-teal-100 text-teal-600' :
+                                        donation.logistics.deliverystatus === 'IN_TRANSIT' ? 'bg-blue-100 text-blue-600' :
+                                            donation.logistics.deliverystatus === 'ACCEPTED' ? 'bg-purple-100 text-purple-600' :
+                                                'bg-orange-100 text-orange-600'
                                     }`}>
                                     <Truck className="w-6 h-6" />
                                 </div>
                                 <div>
                                     <p className="text-xs font-bold text-gray-500 uppercase tracking-widest">Tracking Status</p>
                                     <p className={`text-xl font-bold mt-1 tracking-tight ${donation.logistics.deliverystatus === 'DELIVERED' ? 'text-green-800' :
-                                            donation.logistics.deliverystatus === 'RECEIVED' ? 'text-teal-800' :
-                                                donation.logistics.deliverystatus === 'IN_TRANSIT' ? 'text-blue-800' :
-                                                    donation.logistics.deliverystatus === 'ACCEPTED' ? 'text-purple-800' :
-                                                        'text-orange-800'
+                                        donation.logistics.deliverystatus === 'RECEIVED' ? 'text-teal-800' :
+                                            donation.logistics.deliverystatus === 'IN_TRANSIT' ? 'text-blue-800' :
+                                                donation.logistics.deliverystatus === 'ACCEPTED' ? 'text-purple-800' :
+                                                    'text-orange-800'
                                         }`}>
                                         {donation.logistics.deliverystatus.replace("_", " ")}
                                     </p>

@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../../services/api';
+import { useToast } from '../../context/ToastContext';
 
 const Needs = () => {
     const [needs, setNeeds] = useState([]);
     const [loading, setLoading] = useState(true);
     const role = localStorage.getItem('role')?.toUpperCase();
     const navigate = useNavigate();
+    const { showToast } = useToast();
 
     useEffect(() => {
         fetchNeeds();
@@ -28,6 +30,19 @@ const Needs = () => {
             case 'SOS': return 'bg-red-100 text-red-800 border-red-200';
             case 'URGENT': return 'bg-orange-100 text-orange-800 border-orange-200';
             default: return 'bg-blue-100 text-blue-800 border-blue-200';
+        }
+    };
+
+    const handleDelete = async (reqId) => {
+        if (!window.confirm("Are you sure you want to delete this requirement? If donations have already been made towards this, it will be marked as fulfilled instead of fully removed.")) return;
+
+        try {
+            await api.delete(`/requirements/${reqId}`);
+            showToast("Requirement deleted successfully", "success");
+            fetchNeeds();
+        } catch (error) {
+            console.error('Error deleting requirement:', error);
+            showToast("Failed to delete requirement.", "error");
         }
     };
 
@@ -74,12 +89,32 @@ const Needs = () => {
                             <div key={need.requirementid} className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 overflow-hidden group flex flex-col">
                                 <div className="p-6 flex-grow">
                                     <div className="flex justify-between items-start mb-4">
-                                        <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${getUrgencyColor(need.urgency)}`}>
-                                            {need.urgency}
-                                        </span>
-                                        <span className="text-xs font-medium text-gray-400 bg-gray-50 px-2 py-1 rounded-lg">
-                                            {new Date(need.createdAt).toLocaleDateString()}
-                                        </span>
+                                        <div className="flex gap-2">
+                                            <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border ${getUrgencyColor(need.urgency)}`}>
+                                                {need.urgency}
+                                            </span>
+                                            {!need.isActive && (
+                                                <span className="bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider border border-gray-300">
+                                                    Closed
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-xs font-medium text-gray-400 bg-gray-50 px-2 py-1 rounded-lg">
+                                                {new Date(need.createdAt).toLocaleDateString()}
+                                            </span>
+                                            {role === 'NGO' && (
+                                                <button
+                                                    onClick={() => handleDelete(need.requirementid)}
+                                                    className="text-red-500 hover:text-red-700 hover:bg-red-50 p-1.5 rounded-full transition-colors"
+                                                    title="Delete Requirement"
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                        <path d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6" />
+                                                    </svg>
+                                                </button>
+                                            )}
+                                        </div>
                                     </div>
 
                                     <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-[#2E7D32] transition-colors">{need.title}</h3>
