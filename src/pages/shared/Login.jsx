@@ -3,12 +3,22 @@ import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import loginVisual from "../../assets/loginimage.jpg";
 import { useToast } from "../../context/ToastContext";
+import { GoogleLogin } from "@react-oauth/google";
 
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const { showToast } = useToast();
+
+  const navigateByRole = (role) => {
+    if (role === "DONOR") navigate('/mydonations');
+    else if (role === "NGO") navigate('/incomingdonations');
+    else if (role === "ADMIN") navigate('/allngos');
+    else if (role === "NV_NGO") navigate('/verification-pending');
+    else if (role === "INCOMPLETE") navigate('/complete-profile');
+    else navigate('/');
+  };
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -20,27 +30,25 @@ function Login() {
       localStorage.setItem('role', response.data.role);
       localStorage.setItem('userid', response.data.userid);
       showToast("Login successful!", "success");
-      const role = response.data.role;
-      if (role == "DONOR") {
-        navigate('/mydonations');
-      }
-      else if (role == "NGO") {
-        navigate('/incomingdonations');
-      }
-      else if (role == "ADMIN") {
-        navigate('/allngos');
-      }
-      else if (role == "NV_NGO") {
-        navigate('/verification-pending');
-      }
-      else {
-        navigate('/');
-      }
-
+      navigateByRole(response.data.role);
     }
     catch (error) {
       console.log("login failed!!", error);
       showToast("Login failed: " + (error.response?.data?.message || "Unknown error"), "error");
+    }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      const response = await api.post('/auth/google', { idToken: credentialResponse.credential });
+      localStorage.setItem('jwt_token', response.data.token);
+      localStorage.setItem('role', response.data.role);
+      localStorage.setItem('userid', response.data.userid);
+      showToast("Google login successful!", "success");
+      navigateByRole(response.data.role);
+    } catch (error) {
+      console.error("Google login failed", error);
+      showToast("Google login failed: " + (error.response?.data || "Unknown error"), "error");
     }
   };
 
@@ -92,6 +100,25 @@ function Login() {
             Login
           </button>
         </form>
+
+        {/* Divider */}
+        <div className="flex items-center gap-3 my-4">
+          <div className="flex-1 h-px bg-gray-200"></div>
+          <span className="text-xs text-gray-400 font-medium">OR</span>
+          <div className="flex-1 h-px bg-gray-200"></div>
+        </div>
+
+        {/* Google Sign-In Button */}
+        <div className="flex justify-center">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => showToast("Google login failed", "error")}
+            theme="outline"
+            size="large"
+            width="100%"
+            text="signin_with"
+          />
+        </div>
       </div>
 
     </div>

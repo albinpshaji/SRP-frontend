@@ -23,6 +23,7 @@ import LogisticsDetails from './pages/distributor/LogisticsDetails';
 import Needs from './pages/shared/Needs';
 import UploadNeed from './pages/shared/UploadNeed';
 import Feedback from './pages/admin/Feedback';
+import CompleteProfile from './pages/shared/CompleteProfile';
 
 const router = createBrowserRouter([
   {
@@ -51,18 +52,24 @@ const router = createBrowserRouter([
       { path: "/logistics/:id", element: (<Protectedroute><LogisticsDetails /></Protectedroute>) },
       { path: "/needs", element: (<Protectedroute><Needs /></Protectedroute>) },
       { path: "/upload-need", element: (<Protectedroute><UploadNeed /></Protectedroute>) },
-      { path: "/feedback", element: (<Protectedroute><Feedback /></Protectedroute>) }
+      { path: "/feedback", element: (<Protectedroute><Feedback /></Protectedroute>) },
+      { path: "/complete-profile", element: (<Protectedroute><CompleteProfile /></Protectedroute>) }
     ]
   }
 ]);
 
 import { ToastProvider } from './context/ToastContext';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '267881132315-s4pocrjic9m1mb0eh7udh3n52cr81jgs.apps.googleusercontent.com';
 
 function App() {
   return (
-    <ToastProvider>
-      <RouterProvider router={router} />
-    </ToastProvider>
+    <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+      <ToastProvider>
+        <RouterProvider router={router} />
+      </ToastProvider>
+    </GoogleOAuthProvider>
   );
 }
 

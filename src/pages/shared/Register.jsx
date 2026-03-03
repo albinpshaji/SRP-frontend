@@ -3,6 +3,7 @@ import api from "../../services/api";
 import { Link, useNavigate } from "react-router-dom";
 import { Heart, Camera, Upload, Maximize2, Minimize2, Search, MapPin, Loader2 } from "lucide-react";
 import { useToast } from "../../context/ToastContext";
+import { GoogleLogin } from "@react-oauth/google";
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -50,8 +51,13 @@ function Register() {
                         const lon = position.coords.longitude;
                         setLatitude(lat);
                         setLongitude(lon);
-                        reverseGeocode(lat, lon);
                         showToast("Location detected automatically!", "success");
+                        // Auto-resolve address from coordinates
+                        api.get(`/api/locations/search?q=${lat},${lon}`).catch(() => { });
+                        fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
+                            .then(res => res.json())
+                            .then(data => { if (data.display_name) setLocation(data.display_name); })
+                            .catch(() => { });
                     },
                     (error) => {
                         console.log("GPS auto-detect failed", error);
@@ -68,22 +74,6 @@ function Register() {
         }
     }, [latitude, longitude, showToast]);
 
-    const reverseGeocode = async (lat, lon) => {
-        try {
-            const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
-            const response = await fetch(url);
-            const data = await response.json();
-
-            if (data && data.display_name) {
-                setLocation(data.display_name);
-                showToast("Address updated from map", "success");
-            }
-        } catch (error) {
-            console.error("Reverse geocoding failed", error);
-            showToast("Could not retrieve address format for this location.", "error");
-        }
-    };
-
     const handleMapSearch = async (query) => {
         setMapSearchQuery(query);
         if (!query || query.trim().length < 3) {
@@ -93,10 +83,8 @@ function Register() {
 
         setIsSearchingMap(true);
         try {
-            const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5&countrycodes=in`;
-            const response = await fetch(url);
-            const data = await response.json();
-            setMapSearchResults(data || []);
+            const response = await api.get(`/api/locations/search?q=${encodeURIComponent(query)}`);
+            setMapSearchResults(response.data || []);
         } catch (error) {
             console.error("Map search failed", error);
         } finally {
@@ -121,7 +109,12 @@ function Register() {
                 const { lat, lng } = e.latlng;
                 setLatitude(lat);
                 setLongitude(lng);
-                reverseGeocode(lat, lng);
+                setLocation('Resolving address...');
+                showToast("Pin dropped! Resolving address...", "info");
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                    .then(res => res.json())
+                    .then(data => { if (data.display_name) setLocation(data.display_name); else setLocation(''); })
+                    .catch(() => setLocation(''));
             },
         });
 
@@ -132,6 +125,33 @@ function Register() {
 
     const handleregister = async (e) => {
         e.preventDefault();
+
+        // --- Validation ---
+        const phoneRegex = /^[0-9]{10}$/;
+        if (!phoneRegex.test(phone.trim())) {
+            showToast("Phone number must be exactly 10 digits", "error");
+            return;
+        }
+        if (username.trim().length < 3) {
+            showToast("Username must be at least 3 characters", "error");
+            return;
+        }
+        if (/\s/.test(username.trim())) {
+            showToast("Username cannot contain spaces", "error");
+            return;
+        }
+        if (password.trim().length < 6) {
+            showToast("Password must be at least 6 characters", "error");
+            return;
+        }
+        if (latitude === null || longitude === null) {
+            showToast("Please pick your location on the map", "error");
+            return;
+        }
+        if (role === 'NGO' && (!imagefile)) {
+            showToast("NGO proof document is required", "error");
+            return;
+        }
 
         const formData = new FormData();
         const userDto = {
@@ -408,12 +428,16 @@ function Register() {
                                 <label className="block text-sm font-semibold text-gray-600 mb-1">Location</label>
                                 <input
                                     type="text"
-                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-600 outline-none bg-gray-50 focus:bg-white"
-                                    placeholder="City"
+                                    readOnly
+                                    title={location}
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 cursor-not-allowed outline-none"
+                                    placeholder="Pick location on map or search"
                                     value={location}
-                                    onChange={(e) => setLocation(e.target.value)}
                                     required
                                 />
+                                {location && (
+                                    <p className="text-xs text-gray-500 leading-relaxed mt-1">📍 {location}</p>
+                                )}
                             </div>
                         </div>
 
@@ -464,6 +488,41 @@ function Register() {
                         >
                             {role === 'NGO' ? 'Register as NGO' : 'Register as Donor'}
                         </button>
+
+                        {/* Divider */}
+                        <div className="flex items-center gap-3 my-4">
+                            <div className="flex-1 h-px bg-gray-200"></div>
+                            <span className="text-xs text-gray-400 font-medium">OR</span>
+                            <div className="flex-1 h-px bg-gray-200"></div>
+                        </div>
+
+                        {/* Google Sign-In */}
+                        <div className="flex justify-center">
+                            <GoogleLogin
+                                onSuccess={async (credentialResponse) => {
+                                    try {
+                                        const response = await api.post('/auth/google', { idToken: credentialResponse.credential });
+                                        localStorage.setItem('jwt_token', response.data.token);
+                                        localStorage.setItem('role', response.data.role);
+                                        localStorage.setItem('userid', response.data.userid);
+                                        showToast("Google sign-in successful!", "success");
+                                        const r = response.data.role;
+                                        if (r === "DONOR") navigate('/mydonations');
+                                        else if (r === "NGO") navigate('/incomingdonations');
+                                        else if (r === "ADMIN") navigate('/allngos');
+                                        else if (r === "NV_NGO") navigate('/verification-pending');
+                                        else if (r === "INCOMPLETE") navigate('/complete-profile');
+                                        else navigate('/');
+                                    } catch (error) {
+                                        showToast("Google sign-in failed: " + (error.response?.data || "Unknown error"), "error");
+                                    }
+                                }}
+                                onError={() => showToast("Google sign-in failed", "error")}
+                                theme="outline"
+                                size="large"
+                                text="signup_with"
+                            />
+                        </div>
 
                         <p className="text-center text-gray-500 text-sm mt-4">
                             Already have an account? <Link to="/login" className="text-[#2E7D32] font-bold hover:underline">Login</Link>
