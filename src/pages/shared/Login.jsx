@@ -13,7 +13,9 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await api.post('/login', { username, password });
+      const trimmedUsername = username.trim();
+      const trimmedPassword = password.trim();
+      const response = await api.post('/login', { username: trimmedUsername, password: trimmedPassword });
       localStorage.setItem('jwt_token', response.data.token);
       localStorage.setItem('role', response.data.role);
       localStorage.setItem('userid', response.data.userid);
