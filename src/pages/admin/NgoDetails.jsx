@@ -90,7 +90,7 @@ function NgoDetails() {
                         <div className="absolute inset-0 bg-black/10"></div>
                     </div>
 
-                    <div className="px-8 pb-8 flex flex-col md:flex-row items-center md:items-end -mt-12 gap-6">
+                    <div className="px-8 pb-8 flex flex-col md:flex-row items-center md:items-end -mt-12 gap-6 relative z-10">
                         {/* Profile Image with Border */}
                         <div className="w-32 h-32 rounded-full border-4 border-white shadow-lg bg-white overflow-hidden z-0">
                             <ProfileImage userid={id} username={ngoData.username} className="w-full h-full" />
@@ -109,8 +109,8 @@ function NgoDetails() {
                         {/* Status Badge */}
                         <div className="mb-4 md:mb-2">
                             <div className={`px-4 py-2 rounded-full text-sm font-bold flex items-center shadow-sm border ${isVerified ? "bg-green-50 text-green-700 border-green-200" :
-                                    isRejected ? "bg-red-50 text-red-700 border-red-200" :
-                                        "bg-orange-50 text-orange-700 border-orange-200"
+                                isRejected ? "bg-red-50 text-red-700 border-red-200" :
+                                    "bg-orange-50 text-orange-700 border-orange-200"
                                 }`}>
                                 {isVerified ? <ShieldCheck className="w-4 h-4 mr-2" /> :
                                     isRejected ? <XCircle className="w-4 h-4 mr-2" /> :

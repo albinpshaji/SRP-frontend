@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
-import { MapPin, Search, Loader2, Map as MapIcon, List, Navigation } from "lucide-react";
+import { MapPin, Search, Loader2, Map as MapIcon, List } from "lucide-react";
 import ProfileImage from "../../components/common/ProfileImage";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -51,7 +51,6 @@ function Ngos() {
     const [viewMode, setViewMode] = useState('list'); // 'list' or 'map'
     const [userLat, setUserLat] = useState(null);
     const [userLon, setUserLon] = useState(null);
-    const [locationError, setLocationError] = useState("");
 
     const navigate = useNavigate();
     const observer = useRef();
@@ -160,7 +159,6 @@ function Ngos() {
                 (position) => {
                     setUserLat(position.coords.latitude);
                     setUserLon(position.coords.longitude);
-                    setLocationError("");
                 },
                 (error) => {
                     console.log("Silent location failure: User denied or unavailable.");
@@ -251,9 +249,9 @@ function Ngos() {
                                                         />
                                                         <div className="flex flex-col">
                                                             <h3 className="font-bold text-gray-900 text-base leading-tight capitalize line-clamp-2">{u.username}</h3>
-                                                            {u.distance !== undefined && (
+                                                            {u.distanceFormatted && (
                                                                 <span className="text-xs font-semibold text-[#2E7D32] bg-green-50 px-2 py-0.5 rounded-full mt-1 w-fit border border-[#2E7D32]/20 shadow-sm">
-                                                                    {u.distance.toFixed(1)} km away
+                                                                    {u.distanceFormatted}
                                                                 </span>
                                                             )}
                                                         </div>
