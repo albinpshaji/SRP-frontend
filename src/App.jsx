@@ -24,6 +24,7 @@ import Needs from './pages/shared/Needs';
 import UploadNeed from './pages/shared/UploadNeed';
 import Feedback from './pages/admin/Feedback';
 import CompleteProfile from './pages/shared/CompleteProfile';
+import ServerWakeUp from './components/common/ServerWakeUp';
 
 const router = createBrowserRouter([
   {
@@ -67,7 +68,9 @@ function App() {
   return (
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
       <ToastProvider>
-        <RouterProvider router={router} />
+        <ServerWakeUp>
+          <RouterProvider router={router} />
+        </ServerWakeUp>
       </ToastProvider>
     </GoogleOAuthProvider>
   );
