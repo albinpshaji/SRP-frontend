@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import api from "../../services/api";
 import { useNavigate } from "react-router-dom";
 import { Camera, Upload, Maximize2, Minimize2, Search, MapPin, Loader2 } from "lucide-react";
@@ -8,15 +8,19 @@ import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
 // Fix for default marker icon in leaflet
+import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
+import markerIcon from 'leaflet/dist/images/marker-icon.png';
+import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
-    iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
-    iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-    shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+    iconRetinaUrl: markerIcon2x,
+    iconUrl: markerIcon,
+    shadowUrl: markerShadow,
 });
 
 function CompleteProfile() {
     const [role, setRole] = useState('DONOR');
+    const [username, setUsername] = useState('');
     const [phone, setPhone] = useState('');
     const [location, setLocation] = useState('');
     const [latitude, setLatitude] = useState(null);
@@ -66,21 +70,27 @@ function CompleteProfile() {
         }
     }, [latitude, longitude, showToast]);
 
-    const handleMapSearch = async (query) => {
+    const searchTimerRef = useRef(null);
+
+    const handleMapSearch = (query) => {
         setMapSearchQuery(query);
+        if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
         if (!query || query.trim().length < 3) {
             setMapSearchResults([]);
+            setIsSearchingMap(false);
             return;
         }
-        setIsSearchingMap(true);
-        try {
-            const response = await api.get(`/api/locations/search?q=${encodeURIComponent(query)}`);
-            setMapSearchResults(response.data || []);
-        } catch (error) {
-            console.error("Map search failed", error);
-        } finally {
-            setIsSearchingMap(false);
-        }
+        searchTimerRef.current = setTimeout(async () => {
+            setIsSearchingMap(true);
+            try {
+                const response = await api.get(`/api/locations/search?q=${encodeURIComponent(query)}`);
+                setMapSearchResults(response.data || []);
+            } catch (error) {
+                console.error("Map search failed", error);
+            } finally {
+                setIsSearchingMap(false);
+            }
+        }, 600);
     };
 
     const selectMapSearchResult = (result) => {
@@ -118,6 +128,11 @@ function CompleteProfile() {
         setIsSubmitting(true);
 
         // --- Validation ---
+        if (username.trim().length < 3) {
+            showToast("Username must be at least 3 characters", "error");
+            setIsSubmitting(false);
+            return;
+        }
         const phoneRegex = /^[0-9]{10}$/;
         if (!phoneRegex.test(phone.trim())) {
             showToast("Phone number must be exactly 10 digits", "error");
@@ -142,6 +157,7 @@ function CompleteProfile() {
 
         const formData = new FormData();
         const userDto = {
+            username: username.trim(),
             role,
             phone: phone.trim(),
             location: location.trim(),
@@ -217,6 +233,17 @@ function CompleteProfile() {
                                 NGO
                             </button>
                         </div>
+                    </div>
+
+                    {/* Username */}
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm font-semibold text-gray-600">Username *</label>
+                        <input type="text" required
+                            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-600 outline-none transition-all"
+                            placeholder="Choose a unique username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
                     </div>
 
                     {/* Phone */}
