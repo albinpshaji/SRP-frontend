@@ -3,6 +3,7 @@ import api from "../../services/api";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import donateVisual from '../../assets/loginimage.jpg';
 import { useToast } from "../../context/ToastContext";
+import ProfileLocationEditor from "../../components/profile/ProfileLocationEditor";
 
 function Donateitems() {
     const { id } = useParams();
@@ -20,10 +21,17 @@ function Donateitems() {
     const [category, setCategory] = useState(requirement ? requirement.category : "Food");
     const [logistics, setLogistics] = useState("Dropoff");
     const [pickuplocation, setPickupLocation] = useState("");
+    const [pickupLatitude, setPickupLatitude] = useState("");
+    const [pickupLongitude, setPickupLongitude] = useState("");
     const [pickupdate, setPickupdate] = useState("");
+    const [availabilityStart, setAvailabilityStart] = useState("");
+    const [availabilityEnd, setAvailabilityEnd] = useState("");
+    const [timePreference, setTimePreference] = useState("ANYTIME");
+    const [dayPreference, setDayPreference] = useState("ANY_DAY");
     const [imageFile, setImageFile] = useState(null);
     const [quantityProvided, setQuantityProvided] = useState(1);
     const [loading, setLoading] = useState(false);
+    const [defaultPickup, setDefaultPickup] = useState(null);
 
     let pageTitle = isDirectDonation ? "Donate to NGO" : "List on Marketplace";
     if (requirement) {
@@ -36,9 +44,44 @@ function Donateitems() {
     useEffect(() => {
         if (logistics === "Dropoff") {
             setPickupLocation("");
+            setPickupLatitude("");
+            setPickupLongitude("");
             setPickupdate("");
+            return;
         }
-    }, [logistics]);
+
+        if (defaultPickup && !pickupLatitude && !pickupLongitude) {
+            setPickupLocation(defaultPickup.location || "");
+            setPickupLatitude(defaultPickup.latitude || "");
+            setPickupLongitude(defaultPickup.longitude || "");
+        }
+    }, [logistics, defaultPickup, pickupLatitude, pickupLongitude]);
+
+    useEffect(() => {
+        const loadDefaultPickup = async () => {
+            try {
+                const response = await api.get("/users/profile/me");
+                if (response.data?.latitude !== null && response.data?.latitude !== undefined &&
+                    response.data?.longitude !== null && response.data?.longitude !== undefined) {
+                    const defaults = {
+                        location: response.data.location || "",
+                        latitude: String(response.data.latitude),
+                        longitude: String(response.data.longitude),
+                    };
+                    setDefaultPickup(defaults);
+                    if (logistics === "Pickup") {
+                        setPickupLocation(defaults.location);
+                        setPickupLatitude(defaults.latitude);
+                        setPickupLongitude(defaults.longitude);
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to load default pickup location", error);
+            }
+        };
+
+        loadDefaultPickup();
+    }, []);
 
     const handleFileChange = (e) => {
         const file = e.target.files[0];
@@ -63,7 +106,17 @@ function Donateitems() {
 
         // Final check to ensure no address is sent if dropoff
         if (logistics === "Pickup" && !pickuplocation.trim()) {
-            showToast("Please enter a pickup address.", "error");
+            showToast("Please set a pickup location on the map.", "error");
+            return;
+        }
+
+        if (logistics === "Pickup" && (!pickupLatitude || !pickupLongitude)) {
+            showToast("Please drop the pickup pin on the map.", "error");
+            return;
+        }
+
+        if (availabilityStart && availabilityEnd && new Date(availabilityEnd) < new Date(availabilityStart)) {
+            showToast("Availability end must be after availability start.", "error");
             return;
         }
 
@@ -80,6 +133,12 @@ function Donateitems() {
                     method: logistics,
                     address_line: logistics === "Pickup" ? pickuplocation : null,
                     pickupdate: logistics === "Pickup" && pickupdate ? pickupdate : null,
+                    availabilityStart: availabilityStart || null,
+                    availabilityEnd: availabilityEnd || null,
+                    timePreference,
+                    dayPreference,
+                    pickupLatitude: logistics === "Pickup" ? parseFloat(pickupLatitude) : null,
+                    pickupLongitude: logistics === "Pickup" ? parseFloat(pickupLongitude) : null,
                 },
                 recepientid: isDirectDonation ? parseInt(id) : null,
                 requirementid: requirement ? requirement.requirementid : null,
@@ -225,31 +284,91 @@ function Donateitems() {
                                 </select>
                             </div>
 
-                            <div className={`transition-all duration-500 ease-in-out ${requirement ? 'md:col-span-1' : 'md:col-span-2'}`}>
-                                <label className="block text-sm font-semibold text-gray-600 mb-1">Pickup Address</label>
-                                <input
-                                    value={pickuplocation}
-                                    onChange={(e) => setPickupLocation(e.target.value)}
-                                    required={logistics === "Pickup"}
-                                    disabled={logistics === "Dropoff"}
-                                    className={`w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-600 outline-none ${logistics === 'Dropoff' ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : ''}`}
-                                    placeholder={logistics === 'Dropoff' ? "Not applicable for drop-off" : "Enter pickup address"}
-                                />
-                            </div>
+                            {logistics === "Dropoff" && (
+                                <div className={`rounded-2xl border border-dashed border-green-200 bg-green-50/60 p-4 text-sm text-green-900 ${requirement ? 'md:col-span-1' : 'md:col-span-2'}`}>
+                                    The NGO will expect you to bring the donation to their side, so no pickup point is needed.
+                                </div>
+                            )}
 
-                            <div
-                                className={`transition-all duration-500 ease-in-out md:col-span-2 overflow-hidden ${logistics === 'Pickup' ? 'max-h-32 opacity-100' : 'max-h-0 opacity-0'}`}
-                            >
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-600 mb-1">Preferred Pickup Date & Time</label>
-                                    <input
-                                        type="datetime-local"
-                                        value={pickupdate}
-                                        onChange={(e) => setPickupdate(e.target.value)}
-                                        className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-600 outline-none"
-                                    />
+                            <div className="md:col-span-2 rounded-[24px] border border-green-100 bg-[#F9FFF7] p-5">
+                                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#2E7D32]">Handoff availability</p>
+                                <p className="mt-1 text-sm text-slate-600">
+                                    Tell the NGO when this donation can realistically be collected or dropped off.
+                                </p>
+
+                                <div className="mt-4 grid gap-4 md:grid-cols-2">
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-600 mb-1">Available From</label>
+                                        <input
+                                            type="datetime-local"
+                                            value={availabilityStart}
+                                            onChange={(e) => setAvailabilityStart(e.target.value)}
+                                            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-600 outline-none"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-600 mb-1">Available Until</label>
+                                        <input
+                                            type="datetime-local"
+                                            value={availabilityEnd}
+                                            onChange={(e) => setAvailabilityEnd(e.target.value)}
+                                            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-600 outline-none"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-600 mb-1">Time Preference</label>
+                                        <select
+                                            value={timePreference}
+                                            onChange={(e) => setTimePreference(e.target.value)}
+                                            className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:ring-2 focus:ring-green-600 outline-none"
+                                        >
+                                            <option value="ANYTIME">Anytime</option>
+                                            <option value="MORNING">Morning</option>
+                                            <option value="AFTERNOON">Afternoon</option>
+                                            <option value="EVENING">Evening</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-600 mb-1">Day Preference</label>
+                                        <select
+                                            value={dayPreference}
+                                            onChange={(e) => setDayPreference(e.target.value)}
+                                            className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:ring-2 focus:ring-green-600 outline-none"
+                                        >
+                                            <option value="ANY_DAY">Any day</option>
+                                            <option value="WEEKDAYS_ONLY">Weekdays only</option>
+                                            <option value="WEEKENDS_ONLY">Weekends only</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
+
+                            {logistics === "Pickup" && (
+                                <>
+                                    <div className="md:col-span-2">
+                                        <ProfileLocationEditor
+                                            roleLabel="pickup point"
+                                            location={pickuplocation}
+                                            latitude={pickupLatitude}
+                                            longitude={pickupLongitude}
+                                            setLocation={setPickupLocation}
+                                            setLatitude={setPickupLatitude}
+                                            setLongitude={setPickupLongitude}
+                                            disabled={false}
+                                        />
+                                    </div>
+
+                                    <div className="md:col-span-2">
+                                        <label className="block text-sm font-semibold text-gray-600 mb-1">Preferred Exact Pickup Date & Time (Optional)</label>
+                                        <input
+                                            type="datetime-local"
+                                            value={pickupdate}
+                                            onChange={(e) => setPickupdate(e.target.value)}
+                                            className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-green-600 outline-none"
+                                        />
+                                    </div>
+                                </>
+                            )}
                         </div>
 
                         <div>

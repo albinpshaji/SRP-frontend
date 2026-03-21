@@ -11,8 +11,8 @@ function Mydonations() {
 
     const getmydonations = async () => {
         try {
-            const response = await api.get('/mydonations');
-            setdonations(response.data);
+            const donationResponse = await api.get('/mydonations');
+            setdonations(donationResponse.data);
         } catch (error) {
             console.log("Error loading donations:", error);
         }

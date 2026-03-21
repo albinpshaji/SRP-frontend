@@ -80,7 +80,7 @@ const Navbar = () => {
       </button>
 
       {dropdownOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+        <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-[1010] animate-in fade-in slide-in-from-top-2 duration-200">
           <Link
             to="/profile"
             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-[#2E7D32] transition-colors"
@@ -133,6 +133,7 @@ const Navbar = () => {
           <>
             <Link to="/ngos" className={navlink}>Find NGOs</Link>
             <Link to="/mydonations" className={navlink}>My Donations</Link>
+            <Link to="/leaderboard" className={navlink}>Leaderboard</Link>
             <Link to="/needs" className={navlink}>Needs</Link>
             {renderProfileDropdown()}
           </>
@@ -167,7 +168,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className='bg-white/90 backdrop-blur-md flex flex-col md:flex-row justify-between items-center px-4 md:px-8 py-4 gap-4 md:gap-0 sticky top-0 z-50 shadow-sm border-b border-gray-100'>
+      <nav className='bg-white/90 backdrop-blur-md flex flex-col md:flex-row justify-between items-center px-4 md:px-8 py-4 gap-4 md:gap-0 sticky top-0 z-[1000] shadow-sm border-b border-gray-100'>
         <div className='logo font-extrabold text-[#2E7D32] text-2xl tracking-tight'>Sevana</div>
         <ul className='flex flex-wrap justify-center gap-3 md:gap-8 items-center'>
           {renderLinks()}
@@ -176,7 +177,7 @@ const Navbar = () => {
 
       {/* Feedback Modal */}
       {showFeedbackModal && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-[1400] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-in fade-in duration-200">
           <div className="bg-white rounded-2xl w-full max-w-md p-6 shadow-xl relative animate-in zoom-in-95 duration-200">
             <div className="flex justify-between items-center mb-5">
               <h3 className="text-xl font-bold text-gray-800 flex items-center">

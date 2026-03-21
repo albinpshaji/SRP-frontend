@@ -25,6 +25,7 @@ import UploadNeed from './pages/shared/UploadNeed';
 import Feedback from './pages/admin/Feedback';
 import CompleteProfile from './pages/shared/CompleteProfile';
 import ServerWakeUp from './components/common/ServerWakeUp';
+import Leaderboard from './pages/donor/Leaderboard';
 
 const router = createBrowserRouter([
   {
@@ -54,7 +55,8 @@ const router = createBrowserRouter([
       { path: "/needs", element: (<Protectedroute><Needs /></Protectedroute>) },
       { path: "/upload-need", element: (<Protectedroute><UploadNeed /></Protectedroute>) },
       { path: "/feedback", element: (<Protectedroute><Feedback /></Protectedroute>) },
-      { path: "/complete-profile", element: (<Protectedroute><CompleteProfile /></Protectedroute>) }
+      { path: "/complete-profile", element: (<Protectedroute><CompleteProfile /></Protectedroute>) },
+      { path: "/leaderboard", element: (<Protectedroute><Leaderboard /></Protectedroute>) }
     ]
   }
 ]);
