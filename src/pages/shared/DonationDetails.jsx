@@ -6,6 +6,7 @@ import {
     Phone, Building2, User, CheckCircle2, XCircle, Clock, Trash2
 } from "lucide-react";
 import DonationImage from "../../components/common/DonationImage";
+import DonationChat from "../../components/chat/DonationChat";
 import { useToast } from "../../context/ToastContext";
 
 function DonationDetails() {
@@ -251,12 +252,13 @@ function DonationDetails() {
                             </div>
                         </div>
 
-                        {status === "ACCEPTED" && (
-                            <button className="w-full mt-6 bg-green-700 text-white font-medium py-3 rounded-xl hover:bg-green-800 transition-colors shadow-lg shadow-green-200">
-                                Contact NGO
-                            </button>
-                        )}
                     </div>
+
+                    <DonationChat
+                        donationId={id}
+                        enabled={status === "ACCEPTED"}
+                        title="Chat with NGO"
+                    />
 
                     {/* 2. My Details (Donor Info) - Read Only */}
                     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 opacity-75">

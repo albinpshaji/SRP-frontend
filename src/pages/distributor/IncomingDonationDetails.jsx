@@ -5,6 +5,7 @@ import {
     CheckCircle2, XCircle, Clock, ShieldCheck, AlertCircle
 } from "lucide-react";
 import DonationImage from "../../components/common/DonationImage";
+import DonationChat from "../../components/chat/DonationChat";
 import api from "../../services/api"; // Ensure you import your API service
 import { useToast } from "../../context/ToastContext";
 
@@ -228,6 +229,12 @@ function IncomingDonationDetails() {
                             </button>
                         )}
                     </div>
+
+                    <DonationChat
+                        donationId={id}
+                        enabled={currentStatus === "ACCEPTED"}
+                        title="Chat with Donor"
+                    />
                 </div>
 
             </div>
